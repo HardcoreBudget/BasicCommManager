@@ -1,0 +1,19 @@
+/*
+ * BCM_Config.h
+ *
+ *  Created on: Nov 4, 2023
+ *      Author: Hazim Emad
+ */
+
+#ifndef SERVICES_BCM_HEADER_BCM_CONFIG_H_
+#define SERVICES_BCM_HEADER_BCM_CONFIG_H_
+
+#define MAX_GENERAL_QUEUE_SIZE  50
+#define MAX_USART_QUEUE_SIZE  	20
+#define MAX_SPI_QUEUE_SIZE  	20
+#define MAX_I2C_QUEUE_SIZE  	20
+#define USART_PROTOCOL	BCM_ENABLE
+#define SPI_PROTOCOL	BCM_ENABLE
+#define I2C_PROTOCOL	BCM_ENABLE
+
+#endif /* SERVICES_BCM_HEADER_BCM_CONFIG_H_ */
