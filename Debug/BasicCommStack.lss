@@ -1823,1489 +1823,1487 @@ Disassembly of section .text:
      e2a:	1f 91       	pop	r17
      e2c:	08 95       	ret
 
-00000e2e <BCM_voidResetState>:
+00000e2e <BCM_voidCheckAndStart>:
+static volatile u8 currentUSARTIndex = 0;
 static volatile u8 currentSPIIndex = 0;
 static volatile u8 currentI2CIndex = 0;
 static volatile u8 interruptI2Cindex = 1;
 
-
-static void BCM_voidResetState(volatile u8* index, volatile u8* state, volatile BCM bcm_queue[]){
+static void BCM_voidCheckAndStart(volatile u8* state, u8 index, volatile BCM bcm_queue[]){
      e2e:	df 93       	push	r29
      e30:	cf 93       	push	r28
-     e32:	00 d0       	rcall	.+0      	; 0xe34 <BCM_voidResetState+0x6>
-     e34:	00 d0       	rcall	.+0      	; 0xe36 <BCM_voidResetState+0x8>
-     e36:	00 d0       	rcall	.+0      	; 0xe38 <BCM_voidResetState+0xa>
-     e38:	cd b7       	in	r28, 0x3d	; 61
-     e3a:	de b7       	in	r29, 0x3e	; 62
-     e3c:	9a 83       	std	Y+2, r25	; 0x02
-     e3e:	89 83       	std	Y+1, r24	; 0x01
-     e40:	7c 83       	std	Y+4, r23	; 0x04
-     e42:	6b 83       	std	Y+3, r22	; 0x03
-     e44:	5e 83       	std	Y+6, r21	; 0x06
-     e46:	4d 83       	std	Y+5, r20	; 0x05
-	bcm_queue[*index].state = DONE;
-     e48:	e9 81       	ldd	r30, Y+1	; 0x01
-     e4a:	fa 81       	ldd	r31, Y+2	; 0x02
-     e4c:	80 81       	ld	r24, Z
-     e4e:	28 2f       	mov	r18, r24
-     e50:	30 e0       	ldi	r19, 0x00	; 0
-     e52:	c9 01       	movw	r24, r18
-     e54:	88 0f       	add	r24, r24
-     e56:	99 1f       	adc	r25, r25
-     e58:	88 0f       	add	r24, r24
-     e5a:	99 1f       	adc	r25, r25
-     e5c:	88 0f       	add	r24, r24
-     e5e:	99 1f       	adc	r25, r25
-     e60:	28 0f       	add	r18, r24
-     e62:	39 1f       	adc	r19, r25
-     e64:	8d 81       	ldd	r24, Y+5	; 0x05
-     e66:	9e 81       	ldd	r25, Y+6	; 0x06
-     e68:	fc 01       	movw	r30, r24
-     e6a:	e2 0f       	add	r30, r18
-     e6c:	f3 1f       	adc	r31, r19
-     e6e:	17 82       	std	Z+7, r1	; 0x07
-	if(bcm_queue[*index].Fun_PTR != NULL){
-     e70:	e9 81       	ldd	r30, Y+1	; 0x01
-     e72:	fa 81       	ldd	r31, Y+2	; 0x02
-     e74:	80 81       	ld	r24, Z
-     e76:	28 2f       	mov	r18, r24
-     e78:	30 e0       	ldi	r19, 0x00	; 0
-     e7a:	c9 01       	movw	r24, r18
-     e7c:	88 0f       	add	r24, r24
-     e7e:	99 1f       	adc	r25, r25
-     e80:	88 0f       	add	r24, r24
-     e82:	99 1f       	adc	r25, r25
-     e84:	88 0f       	add	r24, r24
-     e86:	99 1f       	adc	r25, r25
-     e88:	28 0f       	add	r18, r24
-     e8a:	39 1f       	adc	r19, r25
-     e8c:	8d 81       	ldd	r24, Y+5	; 0x05
-     e8e:	9e 81       	ldd	r25, Y+6	; 0x06
-     e90:	fc 01       	movw	r30, r24
-     e92:	e2 0f       	add	r30, r18
-     e94:	f3 1f       	adc	r31, r19
-     e96:	82 81       	ldd	r24, Z+2	; 0x02
-     e98:	93 81       	ldd	r25, Z+3	; 0x03
-     e9a:	00 97       	sbiw	r24, 0x00	; 0
-     e9c:	b9 f0       	breq	.+46     	; 0xecc <BCM_voidResetState+0x9e>
-		bcm_queue[*index].Fun_PTR();
-     e9e:	e9 81       	ldd	r30, Y+1	; 0x01
-     ea0:	fa 81       	ldd	r31, Y+2	; 0x02
-     ea2:	80 81       	ld	r24, Z
-     ea4:	28 2f       	mov	r18, r24
-     ea6:	30 e0       	ldi	r19, 0x00	; 0
-     ea8:	c9 01       	movw	r24, r18
-     eaa:	88 0f       	add	r24, r24
-     eac:	99 1f       	adc	r25, r25
-     eae:	88 0f       	add	r24, r24
-     eb0:	99 1f       	adc	r25, r25
-     eb2:	88 0f       	add	r24, r24
-     eb4:	99 1f       	adc	r25, r25
-     eb6:	28 0f       	add	r18, r24
-     eb8:	39 1f       	adc	r19, r25
-     eba:	8d 81       	ldd	r24, Y+5	; 0x05
-     ebc:	9e 81       	ldd	r25, Y+6	; 0x06
-     ebe:	fc 01       	movw	r30, r24
-     ec0:	e2 0f       	add	r30, r18
-     ec2:	f3 1f       	adc	r31, r19
-     ec4:	02 80       	ldd	r0, Z+2	; 0x02
-     ec6:	f3 81       	ldd	r31, Z+3	; 0x03
-     ec8:	e0 2d       	mov	r30, r0
-     eca:	09 95       	icall
-	}
-	(*index)++;
-     ecc:	e9 81       	ldd	r30, Y+1	; 0x01
-     ece:	fa 81       	ldd	r31, Y+2	; 0x02
-     ed0:	80 81       	ld	r24, Z
-     ed2:	8f 5f       	subi	r24, 0xFF	; 255
-     ed4:	e9 81       	ldd	r30, Y+1	; 0x01
-     ed6:	fa 81       	ldd	r31, Y+2	; 0x02
-     ed8:	80 83       	st	Z, r24
-	*state = READY;
-     eda:	eb 81       	ldd	r30, Y+3	; 0x03
-     edc:	fc 81       	ldd	r31, Y+4	; 0x04
-     ede:	82 e0       	ldi	r24, 0x02	; 2
-     ee0:	80 83       	st	Z, r24
-}
-     ee2:	26 96       	adiw	r28, 0x06	; 6
-     ee4:	0f b6       	in	r0, 0x3f	; 63
-     ee6:	f8 94       	cli
-     ee8:	de bf       	out	0x3e, r29	; 62
-     eea:	0f be       	out	0x3f, r0	; 63
-     eec:	cd bf       	out	0x3d, r28	; 61
-     eee:	cf 91       	pop	r28
-     ef0:	df 91       	pop	r29
-     ef2:	08 95       	ret
-
-00000ef4 <USARTTransmissionDone>:
-
-static void USARTTransmissionDone(){
-     ef4:	df 93       	push	r29
-     ef6:	cf 93       	push	r28
-     ef8:	00 d0       	rcall	.+0      	; 0xefa <USARTTransmissionDone+0x6>
-     efa:	cd b7       	in	r28, 0x3d	; 61
-     efc:	de b7       	in	r29, 0x3e	; 62
-	if(bcm_USART_queue[currentUSARTIndex].state != BUSY){
-     efe:	80 91 cf 01 	lds	r24, 0x01CF
-     f02:	28 2f       	mov	r18, r24
-     f04:	30 e0       	ldi	r19, 0x00	; 0
-     f06:	c9 01       	movw	r24, r18
-     f08:	88 0f       	add	r24, r24
-     f0a:	99 1f       	adc	r25, r25
-     f0c:	88 0f       	add	r24, r24
-     f0e:	99 1f       	adc	r25, r25
-     f10:	88 0f       	add	r24, r24
-     f12:	99 1f       	adc	r25, r25
-     f14:	82 0f       	add	r24, r18
-     f16:	93 1f       	adc	r25, r19
-     f18:	fc 01       	movw	r30, r24
-     f1a:	e5 56       	subi	r30, 0x65	; 101
-     f1c:	fc 4f       	sbci	r31, 0xFC	; 252
-     f1e:	80 81       	ld	r24, Z
-     f20:	81 30       	cpi	r24, 0x01	; 1
-     f22:	c9 f0       	breq	.+50     	; 0xf56 <USARTTransmissionDone+0x62>
-		BCM_voidResetState(&currentGeneralIndex, &generalQueueState, bcm_General_queue);
-     f24:	8e ec       	ldi	r24, 0xCE	; 206
-     f26:	91 e0       	ldi	r25, 0x01	; 1
-     f28:	28 e6       	ldi	r18, 0x68	; 104
-     f2a:	31 e0       	ldi	r19, 0x01	; 1
-     f2c:	42 ed       	ldi	r20, 0xD2	; 210
-     f2e:	51 e0       	ldi	r21, 0x01	; 1
-     f30:	b9 01       	movw	r22, r18
-     f32:	0e 94 17 07 	call	0xe2e	; 0xe2e <BCM_voidResetState>
-		currentGeneralIndex = currentGeneralIndex > (MAX_GENERAL_QUEUE_SIZE - 1) ? 0 : currentGeneralIndex;
-     f36:	80 91 ce 01 	lds	r24, 0x01CE
-     f3a:	82 33       	cpi	r24, 0x32	; 50
-     f3c:	20 f4       	brcc	.+8      	; 0xf46 <USARTTransmissionDone+0x52>
-     f3e:	80 91 ce 01 	lds	r24, 0x01CE
-     f42:	8a 83       	std	Y+2, r24	; 0x02
-     f44:	01 c0       	rjmp	.+2      	; 0xf48 <USARTTransmissionDone+0x54>
-     f46:	1a 82       	std	Y+2, r1	; 0x02
-     f48:	8a 81       	ldd	r24, Y+2	; 0x02
-     f4a:	80 93 ce 01 	sts	0x01CE, r24
-		USARTQueueState = READY;
-     f4e:	82 e0       	ldi	r24, 0x02	; 2
-     f50:	80 93 69 01 	sts	0x0169, r24
-     f54:	15 c0       	rjmp	.+42     	; 0xf80 <USARTTransmissionDone+0x8c>
-	}
-	else{
-		BCM_voidResetState(&currentUSARTIndex, &USARTQueueState, bcm_USART_queue);
-     f56:	8f ec       	ldi	r24, 0xCF	; 207
-     f58:	91 e0       	ldi	r25, 0x01	; 1
-     f5a:	29 e6       	ldi	r18, 0x69	; 105
-     f5c:	31 e0       	ldi	r19, 0x01	; 1
-     f5e:	44 e9       	ldi	r20, 0x94	; 148
-     f60:	53 e0       	ldi	r21, 0x03	; 3
-     f62:	b9 01       	movw	r22, r18
-     f64:	0e 94 17 07 	call	0xe2e	; 0xe2e <BCM_voidResetState>
-		currentUSARTIndex = currentUSARTIndex > (MAX_USART_QUEUE_SIZE - 1) ? 0 : currentUSARTIndex;
-     f68:	80 91 cf 01 	lds	r24, 0x01CF
-     f6c:	84 31       	cpi	r24, 0x14	; 20
-     f6e:	20 f4       	brcc	.+8      	; 0xf78 <USARTTransmissionDone+0x84>
-     f70:	80 91 cf 01 	lds	r24, 0x01CF
-     f74:	89 83       	std	Y+1, r24	; 0x01
-     f76:	01 c0       	rjmp	.+2      	; 0xf7a <USARTTransmissionDone+0x86>
-     f78:	19 82       	std	Y+1, r1	; 0x01
-     f7a:	89 81       	ldd	r24, Y+1	; 0x01
-     f7c:	80 93 cf 01 	sts	0x01CF, r24
-	}
-	BCM_voidSendQueuedData();
-     f80:	0e 94 37 0c 	call	0x186e	; 0x186e <BCM_voidSendQueuedData>
-}
-     f84:	0f 90       	pop	r0
-     f86:	0f 90       	pop	r0
-     f88:	cf 91       	pop	r28
-     f8a:	df 91       	pop	r29
-     f8c:	08 95       	ret
-
-00000f8e <SPITransmissionDone>:
-
-static void SPITransmissionDone(){
-     f8e:	df 93       	push	r29
-     f90:	cf 93       	push	r28
-     f92:	00 d0       	rcall	.+0      	; 0xf94 <SPITransmissionDone+0x6>
-     f94:	cd b7       	in	r28, 0x3d	; 61
-     f96:	de b7       	in	r29, 0x3e	; 62
-	if(bcm_SPI_queue[currentSPIIndex].state != BUSY){
-     f98:	80 91 d0 01 	lds	r24, 0x01D0
-     f9c:	28 2f       	mov	r18, r24
-     f9e:	30 e0       	ldi	r19, 0x00	; 0
-     fa0:	c9 01       	movw	r24, r18
-     fa2:	88 0f       	add	r24, r24
-     fa4:	99 1f       	adc	r25, r25
-     fa6:	88 0f       	add	r24, r24
-     fa8:	99 1f       	adc	r25, r25
-     faa:	88 0f       	add	r24, r24
-     fac:	99 1f       	adc	r25, r25
-     fae:	82 0f       	add	r24, r18
-     fb0:	93 1f       	adc	r25, r19
-     fb2:	fc 01       	movw	r30, r24
-     fb4:	e1 5b       	subi	r30, 0xB1	; 177
-     fb6:	fb 4f       	sbci	r31, 0xFB	; 251
-     fb8:	80 81       	ld	r24, Z
-     fba:	81 30       	cpi	r24, 0x01	; 1
-     fbc:	c9 f0       	breq	.+50     	; 0xff0 <SPITransmissionDone+0x62>
-		BCM_voidResetState(&currentGeneralIndex, &generalQueueState, bcm_General_queue);
-     fbe:	8e ec       	ldi	r24, 0xCE	; 206
-     fc0:	91 e0       	ldi	r25, 0x01	; 1
-     fc2:	28 e6       	ldi	r18, 0x68	; 104
-     fc4:	31 e0       	ldi	r19, 0x01	; 1
-     fc6:	42 ed       	ldi	r20, 0xD2	; 210
-     fc8:	51 e0       	ldi	r21, 0x01	; 1
-     fca:	b9 01       	movw	r22, r18
-     fcc:	0e 94 17 07 	call	0xe2e	; 0xe2e <BCM_voidResetState>
-		currentGeneralIndex = currentGeneralIndex > (MAX_GENERAL_QUEUE_SIZE - 1) ? 0 : currentGeneralIndex;
-     fd0:	80 91 ce 01 	lds	r24, 0x01CE
-     fd4:	82 33       	cpi	r24, 0x32	; 50
-     fd6:	20 f4       	brcc	.+8      	; 0xfe0 <SPITransmissionDone+0x52>
-     fd8:	80 91 ce 01 	lds	r24, 0x01CE
-     fdc:	8a 83       	std	Y+2, r24	; 0x02
-     fde:	01 c0       	rjmp	.+2      	; 0xfe2 <SPITransmissionDone+0x54>
-     fe0:	1a 82       	std	Y+2, r1	; 0x02
-     fe2:	8a 81       	ldd	r24, Y+2	; 0x02
-     fe4:	80 93 ce 01 	sts	0x01CE, r24
-		SPIQueueState = READY;
-     fe8:	82 e0       	ldi	r24, 0x02	; 2
-     fea:	80 93 6a 01 	sts	0x016A, r24
-     fee:	15 c0       	rjmp	.+42     	; 0x101a <SPITransmissionDone+0x8c>
-	}
-	else{
-		BCM_voidResetState(&currentSPIIndex, &SPIQueueState, bcm_SPI_queue);
-     ff0:	80 ed       	ldi	r24, 0xD0	; 208
-     ff2:	91 e0       	ldi	r25, 0x01	; 1
-     ff4:	2a e6       	ldi	r18, 0x6A	; 106
-     ff6:	31 e0       	ldi	r19, 0x01	; 1
-     ff8:	48 e4       	ldi	r20, 0x48	; 72
-     ffa:	54 e0       	ldi	r21, 0x04	; 4
-     ffc:	b9 01       	movw	r22, r18
-     ffe:	0e 94 17 07 	call	0xe2e	; 0xe2e <BCM_voidResetState>
-		currentSPIIndex = currentSPIIndex > (MAX_SPI_QUEUE_SIZE - 1) ? 0 : currentSPIIndex;
-    1002:	80 91 d0 01 	lds	r24, 0x01D0
-    1006:	84 31       	cpi	r24, 0x14	; 20
-    1008:	20 f4       	brcc	.+8      	; 0x1012 <SPITransmissionDone+0x84>
-    100a:	80 91 d0 01 	lds	r24, 0x01D0
-    100e:	89 83       	std	Y+1, r24	; 0x01
-    1010:	01 c0       	rjmp	.+2      	; 0x1014 <SPITransmissionDone+0x86>
-    1012:	19 82       	std	Y+1, r1	; 0x01
-    1014:	89 81       	ldd	r24, Y+1	; 0x01
-    1016:	80 93 d0 01 	sts	0x01D0, r24
-	}
-	BCM_voidSendQueuedData();
-    101a:	0e 94 37 0c 	call	0x186e	; 0x186e <BCM_voidSendQueuedData>
-}
-    101e:	0f 90       	pop	r0
-    1020:	0f 90       	pop	r0
-    1022:	cf 91       	pop	r28
-    1024:	df 91       	pop	r29
-    1026:	08 95       	ret
-
-00001028 <I2CTransmissionDone>:
-
-static void I2CTransmissionDone(){
-    1028:	df 93       	push	r29
-    102a:	cf 93       	push	r28
-    102c:	00 d0       	rcall	.+0      	; 0x102e <I2CTransmissionDone+0x6>
-    102e:	cd b7       	in	r28, 0x3d	; 61
-    1030:	de b7       	in	r29, 0x3e	; 62
-	if(bcm_I2C_queue[currentI2CIndex].state != BUSY){
-    1032:	80 91 d1 01 	lds	r24, 0x01D1
-    1036:	28 2f       	mov	r18, r24
-    1038:	30 e0       	ldi	r19, 0x00	; 0
-    103a:	c9 01       	movw	r24, r18
-    103c:	88 0f       	add	r24, r24
-    103e:	99 1f       	adc	r25, r25
-    1040:	88 0f       	add	r24, r24
-    1042:	99 1f       	adc	r25, r25
-    1044:	88 0f       	add	r24, r24
-    1046:	99 1f       	adc	r25, r25
-    1048:	82 0f       	add	r24, r18
-    104a:	93 1f       	adc	r25, r19
-    104c:	fc 01       	movw	r30, r24
-    104e:	ed 5f       	subi	r30, 0xFD	; 253
-    1050:	fa 4f       	sbci	r31, 0xFA	; 250
-    1052:	80 81       	ld	r24, Z
-    1054:	81 30       	cpi	r24, 0x01	; 1
-    1056:	c9 f0       	breq	.+50     	; 0x108a <I2CTransmissionDone+0x62>
-		BCM_voidResetState(&currentGeneralIndex, &generalQueueState, bcm_General_queue);
-    1058:	8e ec       	ldi	r24, 0xCE	; 206
-    105a:	91 e0       	ldi	r25, 0x01	; 1
-    105c:	28 e6       	ldi	r18, 0x68	; 104
-    105e:	31 e0       	ldi	r19, 0x01	; 1
-    1060:	42 ed       	ldi	r20, 0xD2	; 210
-    1062:	51 e0       	ldi	r21, 0x01	; 1
-    1064:	b9 01       	movw	r22, r18
-    1066:	0e 94 17 07 	call	0xe2e	; 0xe2e <BCM_voidResetState>
-		currentGeneralIndex = currentGeneralIndex > (MAX_GENERAL_QUEUE_SIZE - 1) ? 0 : currentGeneralIndex;
-    106a:	80 91 ce 01 	lds	r24, 0x01CE
-    106e:	82 33       	cpi	r24, 0x32	; 50
-    1070:	20 f4       	brcc	.+8      	; 0x107a <I2CTransmissionDone+0x52>
-    1072:	80 91 ce 01 	lds	r24, 0x01CE
-    1076:	8a 83       	std	Y+2, r24	; 0x02
-    1078:	01 c0       	rjmp	.+2      	; 0x107c <I2CTransmissionDone+0x54>
-    107a:	1a 82       	std	Y+2, r1	; 0x02
-    107c:	8a 81       	ldd	r24, Y+2	; 0x02
-    107e:	80 93 ce 01 	sts	0x01CE, r24
-		I2CQueueState = READY;
-    1082:	82 e0       	ldi	r24, 0x02	; 2
-    1084:	80 93 6b 01 	sts	0x016B, r24
-    1088:	15 c0       	rjmp	.+42     	; 0x10b4 <I2CTransmissionDone+0x8c>
-	}
-	else{
-		BCM_voidResetState(&currentI2CIndex, &I2CQueueState, bcm_I2C_queue);
-    108a:	81 ed       	ldi	r24, 0xD1	; 209
-    108c:	91 e0       	ldi	r25, 0x01	; 1
-    108e:	2b e6       	ldi	r18, 0x6B	; 107
-    1090:	31 e0       	ldi	r19, 0x01	; 1
-    1092:	4c ef       	ldi	r20, 0xFC	; 252
-    1094:	54 e0       	ldi	r21, 0x04	; 4
-    1096:	b9 01       	movw	r22, r18
-    1098:	0e 94 17 07 	call	0xe2e	; 0xe2e <BCM_voidResetState>
-		currentI2CIndex = currentI2CIndex > (MAX_I2C_QUEUE_SIZE - 1) ? 0 : currentI2CIndex;
-    109c:	80 91 d1 01 	lds	r24, 0x01D1
-    10a0:	84 31       	cpi	r24, 0x14	; 20
-    10a2:	20 f4       	brcc	.+8      	; 0x10ac <I2CTransmissionDone+0x84>
-    10a4:	80 91 d1 01 	lds	r24, 0x01D1
-    10a8:	89 83       	std	Y+1, r24	; 0x01
-    10aa:	01 c0       	rjmp	.+2      	; 0x10ae <I2CTransmissionDone+0x86>
-    10ac:	19 82       	std	Y+1, r1	; 0x01
-    10ae:	89 81       	ldd	r24, Y+1	; 0x01
-    10b0:	80 93 d1 01 	sts	0x01D1, r24
-	}
-	BCM_voidSendQueuedData();
-    10b4:	0e 94 37 0c 	call	0x186e	; 0x186e <BCM_voidSendQueuedData>
-}
-    10b8:	0f 90       	pop	r0
-    10ba:	0f 90       	pop	r0
-    10bc:	cf 91       	pop	r28
-    10be:	df 91       	pop	r29
-    10c0:	08 95       	ret
-
-000010c2 <I2C_Callback>:
-
-static void I2C_Callback(){
-    10c2:	df 93       	push	r29
-    10c4:	cf 93       	push	r28
-    10c6:	cd b7       	in	r28, 0x3d	; 61
-    10c8:	de b7       	in	r29, 0x3e	; 62
-	if(interruptI2Cindex == 1){
-    10ca:	80 91 6c 01 	lds	r24, 0x016C
-    10ce:	81 30       	cpi	r24, 0x01	; 1
-    10d0:	09 f0       	breq	.+2      	; 0x10d4 <I2C_Callback+0x12>
-    10d2:	40 c0       	rjmp	.+128    	; 0x1154 <I2C_Callback+0x92>
-		interruptI2Cindex++;
-    10d4:	80 91 6c 01 	lds	r24, 0x016C
-    10d8:	8f 5f       	subi	r24, 0xFF	; 255
-    10da:	80 93 6c 01 	sts	0x016C, r24
-		if(bcm_I2C_queue[currentI2CIndex].state != BUSY){
-    10de:	80 91 d1 01 	lds	r24, 0x01D1
-    10e2:	28 2f       	mov	r18, r24
-    10e4:	30 e0       	ldi	r19, 0x00	; 0
-    10e6:	c9 01       	movw	r24, r18
-    10e8:	88 0f       	add	r24, r24
-    10ea:	99 1f       	adc	r25, r25
-    10ec:	88 0f       	add	r24, r24
-    10ee:	99 1f       	adc	r25, r25
-    10f0:	88 0f       	add	r24, r24
-    10f2:	99 1f       	adc	r25, r25
-    10f4:	82 0f       	add	r24, r18
-    10f6:	93 1f       	adc	r25, r19
-    10f8:	fc 01       	movw	r30, r24
-    10fa:	ed 5f       	subi	r30, 0xFD	; 253
-    10fc:	fa 4f       	sbci	r31, 0xFA	; 250
-    10fe:	80 81       	ld	r24, Z
-    1100:	81 30       	cpi	r24, 0x01	; 1
-    1102:	a1 f0       	breq	.+40     	; 0x112c <I2C_Callback+0x6a>
-			I2C_Master_INT_voidSendSlaveAddressWithWrite(bcm_General_queue[currentGeneralIndex].SlaveAddress);
-    1104:	80 91 ce 01 	lds	r24, 0x01CE
-    1108:	28 2f       	mov	r18, r24
-    110a:	30 e0       	ldi	r19, 0x00	; 0
-    110c:	c9 01       	movw	r24, r18
-    110e:	88 0f       	add	r24, r24
-    1110:	99 1f       	adc	r25, r25
-    1112:	88 0f       	add	r24, r24
-    1114:	99 1f       	adc	r25, r25
-    1116:	88 0f       	add	r24, r24
-    1118:	99 1f       	adc	r25, r25
-    111a:	82 0f       	add	r24, r18
-    111c:	93 1f       	adc	r25, r19
-    111e:	fc 01       	movw	r30, r24
-    1120:	ea 52       	subi	r30, 0x2A	; 42
-    1122:	fe 4f       	sbci	r31, 0xFE	; 254
-    1124:	80 81       	ld	r24, Z
-    1126:	0e 94 2e 14 	call	0x285c	; 0x285c <I2C_Master_INT_voidSendSlaveAddressWithWrite>
-    112a:	da c0       	rjmp	.+436    	; 0x12e0 <I2C_Callback+0x21e>
-		}
-		else{
-			I2C_Master_INT_voidSendSlaveAddressWithWrite(bcm_I2C_queue[currentI2CIndex].SlaveAddress);
-    112c:	80 91 d1 01 	lds	r24, 0x01D1
-    1130:	28 2f       	mov	r18, r24
-    1132:	30 e0       	ldi	r19, 0x00	; 0
-    1134:	c9 01       	movw	r24, r18
-    1136:	88 0f       	add	r24, r24
-    1138:	99 1f       	adc	r25, r25
-    113a:	88 0f       	add	r24, r24
-    113c:	99 1f       	adc	r25, r25
-    113e:	88 0f       	add	r24, r24
-    1140:	99 1f       	adc	r25, r25
-    1142:	82 0f       	add	r24, r18
-    1144:	93 1f       	adc	r25, r19
-    1146:	fc 01       	movw	r30, r24
-    1148:	e0 50       	subi	r30, 0x00	; 0
-    114a:	fb 4f       	sbci	r31, 0xFB	; 251
-    114c:	80 81       	ld	r24, Z
-    114e:	0e 94 2e 14 	call	0x285c	; 0x285c <I2C_Master_INT_voidSendSlaveAddressWithWrite>
-    1152:	c6 c0       	rjmp	.+396    	; 0x12e0 <I2C_Callback+0x21e>
-		}
-	}
-	else if(interruptI2Cindex == 2){
-    1154:	80 91 6c 01 	lds	r24, 0x016C
-    1158:	82 30       	cpi	r24, 0x02	; 2
-    115a:	09 f0       	breq	.+2      	; 0x115e <I2C_Callback+0x9c>
-    115c:	b6 c0       	rjmp	.+364    	; 0x12ca <I2C_Callback+0x208>
-		if(bcm_I2C_queue[currentI2CIndex].state != BUSY){
-    115e:	80 91 d1 01 	lds	r24, 0x01D1
-    1162:	28 2f       	mov	r18, r24
-    1164:	30 e0       	ldi	r19, 0x00	; 0
-    1166:	c9 01       	movw	r24, r18
-    1168:	88 0f       	add	r24, r24
-    116a:	99 1f       	adc	r25, r25
-    116c:	88 0f       	add	r24, r24
-    116e:	99 1f       	adc	r25, r25
-    1170:	88 0f       	add	r24, r24
-    1172:	99 1f       	adc	r25, r25
-    1174:	82 0f       	add	r24, r18
-    1176:	93 1f       	adc	r25, r19
-    1178:	fc 01       	movw	r30, r24
-    117a:	ed 5f       	subi	r30, 0xFD	; 253
-    117c:	fa 4f       	sbci	r31, 0xFA	; 250
-    117e:	80 81       	ld	r24, Z
-    1180:	81 30       	cpi	r24, 0x01	; 1
-    1182:	09 f4       	brne	.+2      	; 0x1186 <I2C_Callback+0xc4>
-    1184:	51 c0       	rjmp	.+162    	; 0x1228 <I2C_Callback+0x166>
-			if(bcm_General_queue[currentGeneralIndex].RegAvailable == 1){
-    1186:	80 91 ce 01 	lds	r24, 0x01CE
-    118a:	28 2f       	mov	r18, r24
-    118c:	30 e0       	ldi	r19, 0x00	; 0
-    118e:	c9 01       	movw	r24, r18
-    1190:	88 0f       	add	r24, r24
-    1192:	99 1f       	adc	r25, r25
-    1194:	88 0f       	add	r24, r24
-    1196:	99 1f       	adc	r25, r25
-    1198:	88 0f       	add	r24, r24
-    119a:	99 1f       	adc	r25, r25
-    119c:	82 0f       	add	r24, r18
-    119e:	93 1f       	adc	r25, r19
-    11a0:	fc 01       	movw	r30, r24
-    11a2:	e8 52       	subi	r30, 0x28	; 40
-    11a4:	fe 4f       	sbci	r31, 0xFE	; 254
-    11a6:	80 81       	ld	r24, Z
-    11a8:	81 30       	cpi	r24, 0x01	; 1
-    11aa:	29 f5       	brne	.+74     	; 0x11f6 <I2C_Callback+0x134>
-				I2C_Master_INT_voidSendu8Data(bcm_General_queue[currentGeneralIndex].RegisterAddress);
-    11ac:	80 91 ce 01 	lds	r24, 0x01CE
-    11b0:	28 2f       	mov	r18, r24
-    11b2:	30 e0       	ldi	r19, 0x00	; 0
-    11b4:	c9 01       	movw	r24, r18
-    11b6:	88 0f       	add	r24, r24
-    11b8:	99 1f       	adc	r25, r25
-    11ba:	88 0f       	add	r24, r24
-    11bc:	99 1f       	adc	r25, r25
-    11be:	88 0f       	add	r24, r24
-    11c0:	99 1f       	adc	r25, r25
-    11c2:	82 0f       	add	r24, r18
-    11c4:	93 1f       	adc	r25, r19
-    11c6:	fc 01       	movw	r30, r24
-    11c8:	e9 52       	subi	r30, 0x29	; 41
-    11ca:	fe 4f       	sbci	r31, 0xFE	; 254
-    11cc:	80 81       	ld	r24, Z
-    11ce:	0e 94 47 14 	call	0x288e	; 0x288e <I2C_Master_INT_voidSendu8Data>
-				bcm_General_queue[currentGeneralIndex].RegAvailable = 0;
-    11d2:	80 91 ce 01 	lds	r24, 0x01CE
-    11d6:	28 2f       	mov	r18, r24
-    11d8:	30 e0       	ldi	r19, 0x00	; 0
-    11da:	c9 01       	movw	r24, r18
-    11dc:	88 0f       	add	r24, r24
-    11de:	99 1f       	adc	r25, r25
-    11e0:	88 0f       	add	r24, r24
-    11e2:	99 1f       	adc	r25, r25
-    11e4:	88 0f       	add	r24, r24
-    11e6:	99 1f       	adc	r25, r25
-    11e8:	82 0f       	add	r24, r18
-    11ea:	93 1f       	adc	r25, r19
-    11ec:	fc 01       	movw	r30, r24
-    11ee:	e8 52       	subi	r30, 0x28	; 40
-    11f0:	fe 4f       	sbci	r31, 0xFE	; 254
-    11f2:	10 82       	st	Z, r1
-    11f4:	75 c0       	rjmp	.+234    	; 0x12e0 <I2C_Callback+0x21e>
-			}
-			else{
-				interruptI2Cindex++;
-    11f6:	80 91 6c 01 	lds	r24, 0x016C
-    11fa:	8f 5f       	subi	r24, 0xFF	; 255
-    11fc:	80 93 6c 01 	sts	0x016C, r24
-				I2C_Master_INT_voidSendu8Data(bcm_General_queue[currentGeneralIndex].data);
-    1200:	80 91 ce 01 	lds	r24, 0x01CE
-    1204:	28 2f       	mov	r18, r24
-    1206:	30 e0       	ldi	r19, 0x00	; 0
-    1208:	c9 01       	movw	r24, r18
-    120a:	88 0f       	add	r24, r24
-    120c:	99 1f       	adc	r25, r25
-    120e:	88 0f       	add	r24, r24
-    1210:	99 1f       	adc	r25, r25
-    1212:	88 0f       	add	r24, r24
-    1214:	99 1f       	adc	r25, r25
-    1216:	82 0f       	add	r24, r18
-    1218:	93 1f       	adc	r25, r19
-    121a:	fc 01       	movw	r30, r24
-    121c:	ed 52       	subi	r30, 0x2D	; 45
-    121e:	fe 4f       	sbci	r31, 0xFE	; 254
-    1220:	80 81       	ld	r24, Z
-    1222:	0e 94 47 14 	call	0x288e	; 0x288e <I2C_Master_INT_voidSendu8Data>
-    1226:	5c c0       	rjmp	.+184    	; 0x12e0 <I2C_Callback+0x21e>
-			}
-		}
-		else{
-			if(bcm_I2C_queue[currentI2CIndex].RegAvailable == 1){
-    1228:	80 91 d1 01 	lds	r24, 0x01D1
-    122c:	28 2f       	mov	r18, r24
-    122e:	30 e0       	ldi	r19, 0x00	; 0
-    1230:	c9 01       	movw	r24, r18
-    1232:	88 0f       	add	r24, r24
-    1234:	99 1f       	adc	r25, r25
-    1236:	88 0f       	add	r24, r24
-    1238:	99 1f       	adc	r25, r25
-    123a:	88 0f       	add	r24, r24
-    123c:	99 1f       	adc	r25, r25
-    123e:	82 0f       	add	r24, r18
-    1240:	93 1f       	adc	r25, r19
-    1242:	fc 01       	movw	r30, r24
-    1244:	ee 5f       	subi	r30, 0xFE	; 254
-    1246:	fa 4f       	sbci	r31, 0xFA	; 250
-    1248:	80 81       	ld	r24, Z
-    124a:	81 30       	cpi	r24, 0x01	; 1
-    124c:	29 f5       	brne	.+74     	; 0x1298 <I2C_Callback+0x1d6>
-				I2C_Master_INT_voidSendu8Data(bcm_I2C_queue[currentI2CIndex].RegisterAddress);
-    124e:	80 91 d1 01 	lds	r24, 0x01D1
-    1252:	28 2f       	mov	r18, r24
-    1254:	30 e0       	ldi	r19, 0x00	; 0
-    1256:	c9 01       	movw	r24, r18
-    1258:	88 0f       	add	r24, r24
-    125a:	99 1f       	adc	r25, r25
-    125c:	88 0f       	add	r24, r24
-    125e:	99 1f       	adc	r25, r25
-    1260:	88 0f       	add	r24, r24
-    1262:	99 1f       	adc	r25, r25
-    1264:	82 0f       	add	r24, r18
-    1266:	93 1f       	adc	r25, r19
-    1268:	fc 01       	movw	r30, r24
-    126a:	ef 5f       	subi	r30, 0xFF	; 255
-    126c:	fa 4f       	sbci	r31, 0xFA	; 250
-    126e:	80 81       	ld	r24, Z
-    1270:	0e 94 47 14 	call	0x288e	; 0x288e <I2C_Master_INT_voidSendu8Data>
-				bcm_I2C_queue[currentI2CIndex].RegAvailable = 0;
-    1274:	80 91 d1 01 	lds	r24, 0x01D1
-    1278:	28 2f       	mov	r18, r24
-    127a:	30 e0       	ldi	r19, 0x00	; 0
-    127c:	c9 01       	movw	r24, r18
-    127e:	88 0f       	add	r24, r24
-    1280:	99 1f       	adc	r25, r25
-    1282:	88 0f       	add	r24, r24
-    1284:	99 1f       	adc	r25, r25
-    1286:	88 0f       	add	r24, r24
-    1288:	99 1f       	adc	r25, r25
-    128a:	82 0f       	add	r24, r18
-    128c:	93 1f       	adc	r25, r19
-    128e:	fc 01       	movw	r30, r24
-    1290:	ee 5f       	subi	r30, 0xFE	; 254
-    1292:	fa 4f       	sbci	r31, 0xFA	; 250
-    1294:	10 82       	st	Z, r1
-    1296:	24 c0       	rjmp	.+72     	; 0x12e0 <I2C_Callback+0x21e>
-			}
-			else{
-				interruptI2Cindex++;
-    1298:	80 91 6c 01 	lds	r24, 0x016C
-    129c:	8f 5f       	subi	r24, 0xFF	; 255
-    129e:	80 93 6c 01 	sts	0x016C, r24
-				I2C_Master_INT_voidSendu8Data(bcm_I2C_queue[currentI2CIndex].data);
-    12a2:	80 91 d1 01 	lds	r24, 0x01D1
-    12a6:	28 2f       	mov	r18, r24
-    12a8:	30 e0       	ldi	r19, 0x00	; 0
-    12aa:	c9 01       	movw	r24, r18
-    12ac:	88 0f       	add	r24, r24
-    12ae:	99 1f       	adc	r25, r25
-    12b0:	88 0f       	add	r24, r24
-    12b2:	99 1f       	adc	r25, r25
-    12b4:	88 0f       	add	r24, r24
-    12b6:	99 1f       	adc	r25, r25
-    12b8:	82 0f       	add	r24, r18
-    12ba:	93 1f       	adc	r25, r19
-    12bc:	fc 01       	movw	r30, r24
-    12be:	e3 50       	subi	r30, 0x03	; 3
-    12c0:	fb 4f       	sbci	r31, 0xFB	; 251
-    12c2:	80 81       	ld	r24, Z
-    12c4:	0e 94 47 14 	call	0x288e	; 0x288e <I2C_Master_INT_voidSendu8Data>
-    12c8:	0b c0       	rjmp	.+22     	; 0x12e0 <I2C_Callback+0x21e>
-			}
-		}
-	}
-	else if(interruptI2Cindex == 3){
-    12ca:	80 91 6c 01 	lds	r24, 0x016C
-    12ce:	83 30       	cpi	r24, 0x03	; 3
-    12d0:	39 f4       	brne	.+14     	; 0x12e0 <I2C_Callback+0x21e>
-		interruptI2Cindex = 1;
-    12d2:	81 e0       	ldi	r24, 0x01	; 1
-    12d4:	80 93 6c 01 	sts	0x016C, r24
-		I2C_Master_INT_voidSendStopCond();
-    12d8:	0e 94 64 14 	call	0x28c8	; 0x28c8 <I2C_Master_INT_voidSendStopCond>
-		I2CTransmissionDone();
-    12dc:	0e 94 14 08 	call	0x1028	; 0x1028 <I2CTransmissionDone>
-	}
-}
-    12e0:	cf 91       	pop	r28
-    12e2:	df 91       	pop	r29
-    12e4:	08 95       	ret
-
-000012e6 <BCM_structLoadData>:
-
-static BCM BCM_structLoadData(u8 data,BCM_COMM_Protocol protocol ,void(*Fun_PTR)(void), u8* SlaveAddress, u8* RegisterAddress, QUEUE_TYPE queueType){
-    12e6:	cf 92       	push	r12
-    12e8:	ef 92       	push	r14
-    12ea:	ff 92       	push	r15
-    12ec:	0f 93       	push	r16
-    12ee:	1f 93       	push	r17
-    12f0:	df 93       	push	r29
-    12f2:	cf 93       	push	r28
-    12f4:	cd b7       	in	r28, 0x3d	; 61
-    12f6:	de b7       	in	r29, 0x3e	; 62
-    12f8:	69 97       	sbiw	r28, 0x19	; 25
-    12fa:	0f b6       	in	r0, 0x3f	; 63
-    12fc:	f8 94       	cli
-    12fe:	de bf       	out	0x3e, r29	; 62
-    1300:	0f be       	out	0x3f, r0	; 63
-    1302:	cd bf       	out	0x3d, r28	; 61
-    1304:	9c 8b       	std	Y+20, r25	; 0x14
-    1306:	8b 8b       	std	Y+19, r24	; 0x13
-    1308:	6a 87       	std	Y+10, r22	; 0x0a
-    130a:	4b 87       	std	Y+11, r20	; 0x0b
-    130c:	3d 87       	std	Y+13, r19	; 0x0d
-    130e:	2c 87       	std	Y+12, r18	; 0x0c
-    1310:	1f 87       	std	Y+15, r17	; 0x0f
-    1312:	0e 87       	std	Y+14, r16	; 0x0e
-    1314:	f9 8a       	std	Y+17, r15	; 0x11
-    1316:	e8 8a       	std	Y+16, r14	; 0x10
-    1318:	ca 8a       	std	Y+18, r12	; 0x12
-	BCM bcm;
-	bcm.data = data;
-    131a:	8a 85       	ldd	r24, Y+10	; 0x0a
-    131c:	8a 83       	std	Y+2, r24	; 0x02
-	bcm.protocol = protocol;
-    131e:	8b 85       	ldd	r24, Y+11	; 0x0b
-    1320:	89 83       	std	Y+1, r24	; 0x01
-	bcm.Fun_PTR = Fun_PTR;
-    1322:	8c 85       	ldd	r24, Y+12	; 0x0c
-    1324:	9d 85       	ldd	r25, Y+13	; 0x0d
-    1326:	9c 83       	std	Y+4, r25	; 0x04
-    1328:	8b 83       	std	Y+3, r24	; 0x03
-	bcm.state = DONE;
-    132a:	18 86       	std	Y+8, r1	; 0x08
-	bcm.type = queueType;
-    132c:	8a 89       	ldd	r24, Y+18	; 0x12
-    132e:	89 87       	std	Y+9, r24	; 0x09
-	if(SlaveAddress != NULL){
-    1330:	8e 85       	ldd	r24, Y+14	; 0x0e
-    1332:	9f 85       	ldd	r25, Y+15	; 0x0f
-    1334:	00 97       	sbiw	r24, 0x00	; 0
-    1336:	89 f0       	breq	.+34     	; 0x135a <BCM_structLoadData+0x74>
-		bcm.SlaveAddress = *SlaveAddress;
-    1338:	ee 85       	ldd	r30, Y+14	; 0x0e
-    133a:	ff 85       	ldd	r31, Y+15	; 0x0f
-    133c:	80 81       	ld	r24, Z
-    133e:	8d 83       	std	Y+5, r24	; 0x05
-		if(RegisterAddress != NULL){
-    1340:	88 89       	ldd	r24, Y+16	; 0x10
-    1342:	99 89       	ldd	r25, Y+17	; 0x11
-    1344:	00 97       	sbiw	r24, 0x00	; 0
-    1346:	39 f0       	breq	.+14     	; 0x1356 <BCM_structLoadData+0x70>
-			bcm.RegAvailable = 1;
-    1348:	81 e0       	ldi	r24, 0x01	; 1
-    134a:	8f 83       	std	Y+7, r24	; 0x07
-			bcm.RegisterAddress = *RegisterAddress;
-    134c:	e8 89       	ldd	r30, Y+16	; 0x10
-    134e:	f9 89       	ldd	r31, Y+17	; 0x11
-    1350:	80 81       	ld	r24, Z
-    1352:	8e 83       	std	Y+6, r24	; 0x06
-    1354:	04 c0       	rjmp	.+8      	; 0x135e <BCM_structLoadData+0x78>
-		}
-		else{
-			bcm.RegAvailable = 0;
-    1356:	1f 82       	std	Y+7, r1	; 0x07
-    1358:	02 c0       	rjmp	.+4      	; 0x135e <BCM_structLoadData+0x78>
-		}
-	}
-	else{
-		bcm.SlaveAddress = 0;
-    135a:	1d 82       	std	Y+5, r1	; 0x05
-		bcm.RegAvailable = 0;
-    135c:	1f 82       	std	Y+7, r1	; 0x07
-	}
-
-	return bcm;
-    135e:	8b 89       	ldd	r24, Y+19	; 0x13
-    1360:	9c 89       	ldd	r25, Y+20	; 0x14
-    1362:	9e 8b       	std	Y+22, r25	; 0x16
-    1364:	8d 8b       	std	Y+21, r24	; 0x15
-    1366:	fe 01       	movw	r30, r28
-    1368:	31 96       	adiw	r30, 0x01	; 1
-    136a:	f8 8f       	std	Y+24, r31	; 0x18
-    136c:	ef 8b       	std	Y+23, r30	; 0x17
-    136e:	f9 e0       	ldi	r31, 0x09	; 9
-    1370:	f9 8f       	std	Y+25, r31	; 0x19
-    1372:	ef 89       	ldd	r30, Y+23	; 0x17
-    1374:	f8 8d       	ldd	r31, Y+24	; 0x18
-    1376:	00 80       	ld	r0, Z
-    1378:	8f 89       	ldd	r24, Y+23	; 0x17
-    137a:	98 8d       	ldd	r25, Y+24	; 0x18
-    137c:	01 96       	adiw	r24, 0x01	; 1
-    137e:	98 8f       	std	Y+24, r25	; 0x18
-    1380:	8f 8b       	std	Y+23, r24	; 0x17
-    1382:	ed 89       	ldd	r30, Y+21	; 0x15
-    1384:	fe 89       	ldd	r31, Y+22	; 0x16
-    1386:	00 82       	st	Z, r0
-    1388:	8d 89       	ldd	r24, Y+21	; 0x15
-    138a:	9e 89       	ldd	r25, Y+22	; 0x16
-    138c:	01 96       	adiw	r24, 0x01	; 1
-    138e:	9e 8b       	std	Y+22, r25	; 0x16
-    1390:	8d 8b       	std	Y+21, r24	; 0x15
-    1392:	99 8d       	ldd	r25, Y+25	; 0x19
-    1394:	91 50       	subi	r25, 0x01	; 1
-    1396:	99 8f       	std	Y+25, r25	; 0x19
-    1398:	e9 8d       	ldd	r30, Y+25	; 0x19
-    139a:	ee 23       	and	r30, r30
-    139c:	51 f7       	brne	.-44     	; 0x1372 <BCM_structLoadData+0x8c>
-}
-    139e:	8b 89       	ldd	r24, Y+19	; 0x13
-    13a0:	9c 89       	ldd	r25, Y+20	; 0x14
-    13a2:	69 96       	adiw	r28, 0x19	; 25
-    13a4:	0f b6       	in	r0, 0x3f	; 63
-    13a6:	f8 94       	cli
-    13a8:	de bf       	out	0x3e, r29	; 62
-    13aa:	0f be       	out	0x3f, r0	; 63
-    13ac:	cd bf       	out	0x3d, r28	; 61
-    13ae:	cf 91       	pop	r28
-    13b0:	df 91       	pop	r29
-    13b2:	1f 91       	pop	r17
-    13b4:	0f 91       	pop	r16
-    13b6:	ff 90       	pop	r15
-    13b8:	ef 90       	pop	r14
-    13ba:	cf 90       	pop	r12
-    13bc:	08 95       	ret
-
-000013be <BCM_voidAddProtocol>:
-
-static void BCM_voidAddProtocol(BCM bcm, volatile u8* index, volatile BCM bcm_queue[]){
-    13be:	cf 92       	push	r12
-    13c0:	df 92       	push	r13
-    13c2:	ef 92       	push	r14
-    13c4:	ff 92       	push	r15
-    13c6:	0f 93       	push	r16
-    13c8:	1f 93       	push	r17
-    13ca:	df 93       	push	r29
-    13cc:	cf 93       	push	r28
-    13ce:	cd b7       	in	r28, 0x3d	; 61
-    13d0:	de b7       	in	r29, 0x3e	; 62
-    13d2:	62 97       	sbiw	r28, 0x12	; 18
-    13d4:	0f b6       	in	r0, 0x3f	; 63
-    13d6:	f8 94       	cli
-    13d8:	de bf       	out	0x3e, r29	; 62
-    13da:	0f be       	out	0x3f, r0	; 63
-    13dc:	cd bf       	out	0x3d, r28	; 61
-    13de:	09 83       	std	Y+1, r16	; 0x01
-    13e0:	1a 83       	std	Y+2, r17	; 0x02
-    13e2:	2b 83       	std	Y+3, r18	; 0x03
-    13e4:	3c 83       	std	Y+4, r19	; 0x04
-    13e6:	4d 83       	std	Y+5, r20	; 0x05
-    13e8:	5e 83       	std	Y+6, r21	; 0x06
-    13ea:	6f 83       	std	Y+7, r22	; 0x07
-    13ec:	78 87       	std	Y+8, r23	; 0x08
-    13ee:	89 87       	std	Y+9, r24	; 0x09
-    13f0:	fb 86       	std	Y+11, r15	; 0x0b
-    13f2:	ea 86       	std	Y+10, r14	; 0x0a
-    13f4:	dd 86       	std	Y+13, r13	; 0x0d
-    13f6:	cc 86       	std	Y+12, r12	; 0x0c
-	if(bcm_queue[*index].state == DONE){
-    13f8:	ea 85       	ldd	r30, Y+10	; 0x0a
-    13fa:	fb 85       	ldd	r31, Y+11	; 0x0b
-    13fc:	80 81       	ld	r24, Z
-    13fe:	28 2f       	mov	r18, r24
-    1400:	30 e0       	ldi	r19, 0x00	; 0
-    1402:	c9 01       	movw	r24, r18
-    1404:	88 0f       	add	r24, r24
-    1406:	99 1f       	adc	r25, r25
-    1408:	88 0f       	add	r24, r24
-    140a:	99 1f       	adc	r25, r25
-    140c:	88 0f       	add	r24, r24
-    140e:	99 1f       	adc	r25, r25
-    1410:	28 0f       	add	r18, r24
-    1412:	39 1f       	adc	r19, r25
-    1414:	8c 85       	ldd	r24, Y+12	; 0x0c
-    1416:	9d 85       	ldd	r25, Y+13	; 0x0d
-    1418:	fc 01       	movw	r30, r24
-    141a:	e2 0f       	add	r30, r18
-    141c:	f3 1f       	adc	r31, r19
-    141e:	87 81       	ldd	r24, Z+7	; 0x07
-    1420:	88 23       	and	r24, r24
-    1422:	09 f0       	breq	.+2      	; 0x1426 <BCM_voidAddProtocol+0x68>
-    1424:	4c c0       	rjmp	.+152    	; 0x14be <BCM_voidAddProtocol+0x100>
-		bcm_queue[*index] = bcm;
-    1426:	ea 85       	ldd	r30, Y+10	; 0x0a
-    1428:	fb 85       	ldd	r31, Y+11	; 0x0b
-    142a:	80 81       	ld	r24, Z
-    142c:	28 2f       	mov	r18, r24
-    142e:	30 e0       	ldi	r19, 0x00	; 0
-    1430:	c9 01       	movw	r24, r18
-    1432:	88 0f       	add	r24, r24
-    1434:	99 1f       	adc	r25, r25
-    1436:	88 0f       	add	r24, r24
-    1438:	99 1f       	adc	r25, r25
-    143a:	88 0f       	add	r24, r24
-    143c:	99 1f       	adc	r25, r25
-    143e:	28 0f       	add	r18, r24
-    1440:	39 1f       	adc	r19, r25
-    1442:	8c 85       	ldd	r24, Y+12	; 0x0c
-    1444:	9d 85       	ldd	r25, Y+13	; 0x0d
-    1446:	82 0f       	add	r24, r18
-    1448:	93 1f       	adc	r25, r19
-    144a:	9f 87       	std	Y+15, r25	; 0x0f
-    144c:	8e 87       	std	Y+14, r24	; 0x0e
-    144e:	ce 01       	movw	r24, r28
-    1450:	01 96       	adiw	r24, 0x01	; 1
-    1452:	99 8b       	std	Y+17, r25	; 0x11
-    1454:	88 8b       	std	Y+16, r24	; 0x10
-    1456:	99 e0       	ldi	r25, 0x09	; 9
-    1458:	9a 8b       	std	Y+18, r25	; 0x12
-    145a:	e8 89       	ldd	r30, Y+16	; 0x10
-    145c:	f9 89       	ldd	r31, Y+17	; 0x11
-    145e:	00 80       	ld	r0, Z
-    1460:	88 89       	ldd	r24, Y+16	; 0x10
-    1462:	99 89       	ldd	r25, Y+17	; 0x11
-    1464:	01 96       	adiw	r24, 0x01	; 1
-    1466:	99 8b       	std	Y+17, r25	; 0x11
-    1468:	88 8b       	std	Y+16, r24	; 0x10
-    146a:	ee 85       	ldd	r30, Y+14	; 0x0e
-    146c:	ff 85       	ldd	r31, Y+15	; 0x0f
-    146e:	00 82       	st	Z, r0
-    1470:	8e 85       	ldd	r24, Y+14	; 0x0e
-    1472:	9f 85       	ldd	r25, Y+15	; 0x0f
-    1474:	01 96       	adiw	r24, 0x01	; 1
-    1476:	9f 87       	std	Y+15, r25	; 0x0f
-    1478:	8e 87       	std	Y+14, r24	; 0x0e
-    147a:	9a 89       	ldd	r25, Y+18	; 0x12
-    147c:	91 50       	subi	r25, 0x01	; 1
-    147e:	9a 8b       	std	Y+18, r25	; 0x12
-    1480:	ea 89       	ldd	r30, Y+18	; 0x12
-    1482:	ee 23       	and	r30, r30
-    1484:	51 f7       	brne	.-44     	; 0x145a <BCM_voidAddProtocol+0x9c>
-		bcm_queue[*index].state = READY;
-    1486:	ea 85       	ldd	r30, Y+10	; 0x0a
-    1488:	fb 85       	ldd	r31, Y+11	; 0x0b
-    148a:	80 81       	ld	r24, Z
-    148c:	28 2f       	mov	r18, r24
-    148e:	30 e0       	ldi	r19, 0x00	; 0
-    1490:	c9 01       	movw	r24, r18
-    1492:	88 0f       	add	r24, r24
-    1494:	99 1f       	adc	r25, r25
-    1496:	88 0f       	add	r24, r24
-    1498:	99 1f       	adc	r25, r25
-    149a:	88 0f       	add	r24, r24
-    149c:	99 1f       	adc	r25, r25
-    149e:	28 0f       	add	r18, r24
-    14a0:	39 1f       	adc	r19, r25
-    14a2:	8c 85       	ldd	r24, Y+12	; 0x0c
-    14a4:	9d 85       	ldd	r25, Y+13	; 0x0d
-    14a6:	fc 01       	movw	r30, r24
-    14a8:	e2 0f       	add	r30, r18
-    14aa:	f3 1f       	adc	r31, r19
-    14ac:	82 e0       	ldi	r24, 0x02	; 2
-    14ae:	87 83       	std	Z+7, r24	; 0x07
-		(*index)++;
-    14b0:	ea 85       	ldd	r30, Y+10	; 0x0a
-    14b2:	fb 85       	ldd	r31, Y+11	; 0x0b
-    14b4:	80 81       	ld	r24, Z
-    14b6:	8f 5f       	subi	r24, 0xFF	; 255
-    14b8:	ea 85       	ldd	r30, Y+10	; 0x0a
-    14ba:	fb 85       	ldd	r31, Y+11	; 0x0b
-    14bc:	80 83       	st	Z, r24
-	}
-	BCM_voidSendQueuedData();
-    14be:	0e 94 37 0c 	call	0x186e	; 0x186e <BCM_voidSendQueuedData>
-}
-    14c2:	62 96       	adiw	r28, 0x12	; 18
-    14c4:	0f b6       	in	r0, 0x3f	; 63
-    14c6:	f8 94       	cli
-    14c8:	de bf       	out	0x3e, r29	; 62
-    14ca:	0f be       	out	0x3f, r0	; 63
-    14cc:	cd bf       	out	0x3d, r28	; 61
-    14ce:	cf 91       	pop	r28
-    14d0:	df 91       	pop	r29
-    14d2:	1f 91       	pop	r17
-    14d4:	0f 91       	pop	r16
-    14d6:	ff 90       	pop	r15
-    14d8:	ef 90       	pop	r14
-    14da:	df 90       	pop	r13
-    14dc:	cf 90       	pop	r12
-    14de:	08 95       	ret
-
-000014e0 <BCM_voidCheckAndStart>:
-
-
-
-static void BCM_voidCheckAndStart(volatile u8* state, u8 index, volatile BCM bcm_queue[]){
-    14e0:	df 93       	push	r29
-    14e2:	cf 93       	push	r28
-    14e4:	cd b7       	in	r28, 0x3d	; 61
-    14e6:	de b7       	in	r29, 0x3e	; 62
-    14e8:	27 97       	sbiw	r28, 0x07	; 7
-    14ea:	0f b6       	in	r0, 0x3f	; 63
-    14ec:	f8 94       	cli
-    14ee:	de bf       	out	0x3e, r29	; 62
-    14f0:	0f be       	out	0x3f, r0	; 63
-    14f2:	cd bf       	out	0x3d, r28	; 61
-    14f4:	9a 83       	std	Y+2, r25	; 0x02
-    14f6:	89 83       	std	Y+1, r24	; 0x01
-    14f8:	6b 83       	std	Y+3, r22	; 0x03
-    14fa:	5d 83       	std	Y+5, r21	; 0x05
-    14fc:	4c 83       	std	Y+4, r20	; 0x04
+     e32:	cd b7       	in	r28, 0x3d	; 61
+     e34:	de b7       	in	r29, 0x3e	; 62
+     e36:	27 97       	sbiw	r28, 0x07	; 7
+     e38:	0f b6       	in	r0, 0x3f	; 63
+     e3a:	f8 94       	cli
+     e3c:	de bf       	out	0x3e, r29	; 62
+     e3e:	0f be       	out	0x3f, r0	; 63
+     e40:	cd bf       	out	0x3d, r28	; 61
+     e42:	9a 83       	std	Y+2, r25	; 0x02
+     e44:	89 83       	std	Y+1, r24	; 0x01
+     e46:	6b 83       	std	Y+3, r22	; 0x03
+     e48:	5d 83       	std	Y+5, r21	; 0x05
+     e4a:	4c 83       	std	Y+4, r20	; 0x04
 	if(*state == READY){
-    14fe:	e9 81       	ldd	r30, Y+1	; 0x01
-    1500:	fa 81       	ldd	r31, Y+2	; 0x02
-    1502:	80 81       	ld	r24, Z
-    1504:	82 30       	cpi	r24, 0x02	; 2
-    1506:	09 f0       	breq	.+2      	; 0x150a <BCM_voidCheckAndStart+0x2a>
-    1508:	c4 c0       	rjmp	.+392    	; 0x1692 <BCM_voidCheckAndStart+0x1b2>
+     e4c:	e9 81       	ldd	r30, Y+1	; 0x01
+     e4e:	fa 81       	ldd	r31, Y+2	; 0x02
+     e50:	80 81       	ld	r24, Z
+     e52:	82 30       	cpi	r24, 0x02	; 2
+     e54:	09 f0       	breq	.+2      	; 0xe58 <BCM_voidCheckAndStart+0x2a>
+     e56:	c4 c0       	rjmp	.+392    	; 0xfe0 <BCM_voidCheckAndStart+0x1b2>
 		if(bcm_queue[index].state == READY){
-    150a:	8b 81       	ldd	r24, Y+3	; 0x03
-    150c:	28 2f       	mov	r18, r24
-    150e:	30 e0       	ldi	r19, 0x00	; 0
-    1510:	c9 01       	movw	r24, r18
-    1512:	88 0f       	add	r24, r24
-    1514:	99 1f       	adc	r25, r25
-    1516:	88 0f       	add	r24, r24
-    1518:	99 1f       	adc	r25, r25
-    151a:	88 0f       	add	r24, r24
-    151c:	99 1f       	adc	r25, r25
-    151e:	28 0f       	add	r18, r24
-    1520:	39 1f       	adc	r19, r25
-    1522:	8c 81       	ldd	r24, Y+4	; 0x04
-    1524:	9d 81       	ldd	r25, Y+5	; 0x05
-    1526:	fc 01       	movw	r30, r24
-    1528:	e2 0f       	add	r30, r18
-    152a:	f3 1f       	adc	r31, r19
-    152c:	87 81       	ldd	r24, Z+7	; 0x07
-    152e:	82 30       	cpi	r24, 0x02	; 2
-    1530:	09 f0       	breq	.+2      	; 0x1534 <BCM_voidCheckAndStart+0x54>
-    1532:	af c0       	rjmp	.+350    	; 0x1692 <BCM_voidCheckAndStart+0x1b2>
+     e58:	8b 81       	ldd	r24, Y+3	; 0x03
+     e5a:	28 2f       	mov	r18, r24
+     e5c:	30 e0       	ldi	r19, 0x00	; 0
+     e5e:	c9 01       	movw	r24, r18
+     e60:	88 0f       	add	r24, r24
+     e62:	99 1f       	adc	r25, r25
+     e64:	88 0f       	add	r24, r24
+     e66:	99 1f       	adc	r25, r25
+     e68:	88 0f       	add	r24, r24
+     e6a:	99 1f       	adc	r25, r25
+     e6c:	28 0f       	add	r18, r24
+     e6e:	39 1f       	adc	r19, r25
+     e70:	8c 81       	ldd	r24, Y+4	; 0x04
+     e72:	9d 81       	ldd	r25, Y+5	; 0x05
+     e74:	fc 01       	movw	r30, r24
+     e76:	e2 0f       	add	r30, r18
+     e78:	f3 1f       	adc	r31, r19
+     e7a:	87 81       	ldd	r24, Z+7	; 0x07
+     e7c:	82 30       	cpi	r24, 0x02	; 2
+     e7e:	09 f0       	breq	.+2      	; 0xe82 <BCM_voidCheckAndStart+0x54>
+     e80:	af c0       	rjmp	.+350    	; 0xfe0 <BCM_voidCheckAndStart+0x1b2>
 			switch(bcm_queue[index].protocol){
-    1534:	8b 81       	ldd	r24, Y+3	; 0x03
-    1536:	28 2f       	mov	r18, r24
-    1538:	30 e0       	ldi	r19, 0x00	; 0
-    153a:	c9 01       	movw	r24, r18
-    153c:	88 0f       	add	r24, r24
-    153e:	99 1f       	adc	r25, r25
-    1540:	88 0f       	add	r24, r24
-    1542:	99 1f       	adc	r25, r25
-    1544:	88 0f       	add	r24, r24
-    1546:	99 1f       	adc	r25, r25
-    1548:	28 0f       	add	r18, r24
-    154a:	39 1f       	adc	r19, r25
-    154c:	8c 81       	ldd	r24, Y+4	; 0x04
-    154e:	9d 81       	ldd	r25, Y+5	; 0x05
-    1550:	fc 01       	movw	r30, r24
-    1552:	e2 0f       	add	r30, r18
-    1554:	f3 1f       	adc	r31, r19
-    1556:	80 81       	ld	r24, Z
-    1558:	28 2f       	mov	r18, r24
-    155a:	30 e0       	ldi	r19, 0x00	; 0
-    155c:	3f 83       	std	Y+7, r19	; 0x07
-    155e:	2e 83       	std	Y+6, r18	; 0x06
-    1560:	8e 81       	ldd	r24, Y+6	; 0x06
-    1562:	9f 81       	ldd	r25, Y+7	; 0x07
-    1564:	81 30       	cpi	r24, 0x01	; 1
-    1566:	91 05       	cpc	r25, r1
-    1568:	09 f4       	brne	.+2      	; 0x156c <BCM_voidCheckAndStart+0x8c>
-    156a:	3f c0       	rjmp	.+126    	; 0x15ea <BCM_voidCheckAndStart+0x10a>
-    156c:	2e 81       	ldd	r18, Y+6	; 0x06
-    156e:	3f 81       	ldd	r19, Y+7	; 0x07
-    1570:	22 30       	cpi	r18, 0x02	; 2
-    1572:	31 05       	cpc	r19, r1
-    1574:	09 f4       	brne	.+2      	; 0x1578 <BCM_voidCheckAndStart+0x98>
-    1576:	6d c0       	rjmp	.+218    	; 0x1652 <BCM_voidCheckAndStart+0x172>
-    1578:	8e 81       	ldd	r24, Y+6	; 0x06
-    157a:	9f 81       	ldd	r25, Y+7	; 0x07
-    157c:	00 97       	sbiw	r24, 0x00	; 0
-    157e:	09 f0       	breq	.+2      	; 0x1582 <BCM_voidCheckAndStart+0xa2>
-    1580:	88 c0       	rjmp	.+272    	; 0x1692 <BCM_voidCheckAndStart+0x1b2>
+     e82:	8b 81       	ldd	r24, Y+3	; 0x03
+     e84:	28 2f       	mov	r18, r24
+     e86:	30 e0       	ldi	r19, 0x00	; 0
+     e88:	c9 01       	movw	r24, r18
+     e8a:	88 0f       	add	r24, r24
+     e8c:	99 1f       	adc	r25, r25
+     e8e:	88 0f       	add	r24, r24
+     e90:	99 1f       	adc	r25, r25
+     e92:	88 0f       	add	r24, r24
+     e94:	99 1f       	adc	r25, r25
+     e96:	28 0f       	add	r18, r24
+     e98:	39 1f       	adc	r19, r25
+     e9a:	8c 81       	ldd	r24, Y+4	; 0x04
+     e9c:	9d 81       	ldd	r25, Y+5	; 0x05
+     e9e:	fc 01       	movw	r30, r24
+     ea0:	e2 0f       	add	r30, r18
+     ea2:	f3 1f       	adc	r31, r19
+     ea4:	80 81       	ld	r24, Z
+     ea6:	28 2f       	mov	r18, r24
+     ea8:	30 e0       	ldi	r19, 0x00	; 0
+     eaa:	3f 83       	std	Y+7, r19	; 0x07
+     eac:	2e 83       	std	Y+6, r18	; 0x06
+     eae:	8e 81       	ldd	r24, Y+6	; 0x06
+     eb0:	9f 81       	ldd	r25, Y+7	; 0x07
+     eb2:	81 30       	cpi	r24, 0x01	; 1
+     eb4:	91 05       	cpc	r25, r1
+     eb6:	09 f4       	brne	.+2      	; 0xeba <BCM_voidCheckAndStart+0x8c>
+     eb8:	3f c0       	rjmp	.+126    	; 0xf38 <BCM_voidCheckAndStart+0x10a>
+     eba:	2e 81       	ldd	r18, Y+6	; 0x06
+     ebc:	3f 81       	ldd	r19, Y+7	; 0x07
+     ebe:	22 30       	cpi	r18, 0x02	; 2
+     ec0:	31 05       	cpc	r19, r1
+     ec2:	09 f4       	brne	.+2      	; 0xec6 <BCM_voidCheckAndStart+0x98>
+     ec4:	6d c0       	rjmp	.+218    	; 0xfa0 <BCM_voidCheckAndStart+0x172>
+     ec6:	8e 81       	ldd	r24, Y+6	; 0x06
+     ec8:	9f 81       	ldd	r25, Y+7	; 0x07
+     eca:	00 97       	sbiw	r24, 0x00	; 0
+     ecc:	09 f0       	breq	.+2      	; 0xed0 <BCM_voidCheckAndStart+0xa2>
+     ece:	88 c0       	rjmp	.+272    	; 0xfe0 <BCM_voidCheckAndStart+0x1b2>
 			case USART:
 				if(USARTQueueState != BUSY){
-    1582:	80 91 69 01 	lds	r24, 0x0169
-    1586:	81 30       	cpi	r24, 0x01	; 1
-    1588:	09 f4       	brne	.+2      	; 0x158c <BCM_voidCheckAndStart+0xac>
-    158a:	83 c0       	rjmp	.+262    	; 0x1692 <BCM_voidCheckAndStart+0x1b2>
+     ed0:	80 91 69 01 	lds	r24, 0x0169
+     ed4:	81 30       	cpi	r24, 0x01	; 1
+     ed6:	09 f4       	brne	.+2      	; 0xeda <BCM_voidCheckAndStart+0xac>
+     ed8:	83 c0       	rjmp	.+262    	; 0xfe0 <BCM_voidCheckAndStart+0x1b2>
 					USARTQueueState = BUSY;
-    158c:	81 e0       	ldi	r24, 0x01	; 1
-    158e:	80 93 69 01 	sts	0x0169, r24
+     eda:	81 e0       	ldi	r24, 0x01	; 1
+     edc:	80 93 69 01 	sts	0x0169, r24
 					bcm_queue[index].state = BUSY;
-    1592:	8b 81       	ldd	r24, Y+3	; 0x03
-    1594:	28 2f       	mov	r18, r24
-    1596:	30 e0       	ldi	r19, 0x00	; 0
-    1598:	c9 01       	movw	r24, r18
-    159a:	88 0f       	add	r24, r24
-    159c:	99 1f       	adc	r25, r25
-    159e:	88 0f       	add	r24, r24
-    15a0:	99 1f       	adc	r25, r25
-    15a2:	88 0f       	add	r24, r24
-    15a4:	99 1f       	adc	r25, r25
-    15a6:	28 0f       	add	r18, r24
-    15a8:	39 1f       	adc	r19, r25
-    15aa:	8c 81       	ldd	r24, Y+4	; 0x04
-    15ac:	9d 81       	ldd	r25, Y+5	; 0x05
-    15ae:	fc 01       	movw	r30, r24
-    15b0:	e2 0f       	add	r30, r18
-    15b2:	f3 1f       	adc	r31, r19
-    15b4:	81 e0       	ldi	r24, 0x01	; 1
-    15b6:	87 83       	std	Z+7, r24	; 0x07
+     ee0:	8b 81       	ldd	r24, Y+3	; 0x03
+     ee2:	28 2f       	mov	r18, r24
+     ee4:	30 e0       	ldi	r19, 0x00	; 0
+     ee6:	c9 01       	movw	r24, r18
+     ee8:	88 0f       	add	r24, r24
+     eea:	99 1f       	adc	r25, r25
+     eec:	88 0f       	add	r24, r24
+     eee:	99 1f       	adc	r25, r25
+     ef0:	88 0f       	add	r24, r24
+     ef2:	99 1f       	adc	r25, r25
+     ef4:	28 0f       	add	r18, r24
+     ef6:	39 1f       	adc	r19, r25
+     ef8:	8c 81       	ldd	r24, Y+4	; 0x04
+     efa:	9d 81       	ldd	r25, Y+5	; 0x05
+     efc:	fc 01       	movw	r30, r24
+     efe:	e2 0f       	add	r30, r18
+     f00:	f3 1f       	adc	r31, r19
+     f02:	81 e0       	ldi	r24, 0x01	; 1
+     f04:	87 83       	std	Z+7, r24	; 0x07
 					*state = BUSY;
-    15b8:	e9 81       	ldd	r30, Y+1	; 0x01
-    15ba:	fa 81       	ldd	r31, Y+2	; 0x02
-    15bc:	81 e0       	ldi	r24, 0x01	; 1
-    15be:	80 83       	st	Z, r24
+     f06:	e9 81       	ldd	r30, Y+1	; 0x01
+     f08:	fa 81       	ldd	r31, Y+2	; 0x02
+     f0a:	81 e0       	ldi	r24, 0x01	; 1
+     f0c:	80 83       	st	Z, r24
 					USART_voidSendInterruptByte(bcm_queue[index].data);
-    15c0:	8b 81       	ldd	r24, Y+3	; 0x03
-    15c2:	28 2f       	mov	r18, r24
-    15c4:	30 e0       	ldi	r19, 0x00	; 0
-    15c6:	c9 01       	movw	r24, r18
-    15c8:	88 0f       	add	r24, r24
-    15ca:	99 1f       	adc	r25, r25
-    15cc:	88 0f       	add	r24, r24
-    15ce:	99 1f       	adc	r25, r25
-    15d0:	88 0f       	add	r24, r24
-    15d2:	99 1f       	adc	r25, r25
-    15d4:	28 0f       	add	r18, r24
-    15d6:	39 1f       	adc	r19, r25
-    15d8:	8c 81       	ldd	r24, Y+4	; 0x04
-    15da:	9d 81       	ldd	r25, Y+5	; 0x05
-    15dc:	fc 01       	movw	r30, r24
-    15de:	e2 0f       	add	r30, r18
-    15e0:	f3 1f       	adc	r31, r19
-    15e2:	81 81       	ldd	r24, Z+1	; 0x01
-    15e4:	0e 94 36 0d 	call	0x1a6c	; 0x1a6c <USART_voidSendInterruptByte>
-    15e8:	54 c0       	rjmp	.+168    	; 0x1692 <BCM_voidCheckAndStart+0x1b2>
+     f0e:	8b 81       	ldd	r24, Y+3	; 0x03
+     f10:	28 2f       	mov	r18, r24
+     f12:	30 e0       	ldi	r19, 0x00	; 0
+     f14:	c9 01       	movw	r24, r18
+     f16:	88 0f       	add	r24, r24
+     f18:	99 1f       	adc	r25, r25
+     f1a:	88 0f       	add	r24, r24
+     f1c:	99 1f       	adc	r25, r25
+     f1e:	88 0f       	add	r24, r24
+     f20:	99 1f       	adc	r25, r25
+     f22:	28 0f       	add	r18, r24
+     f24:	39 1f       	adc	r19, r25
+     f26:	8c 81       	ldd	r24, Y+4	; 0x04
+     f28:	9d 81       	ldd	r25, Y+5	; 0x05
+     f2a:	fc 01       	movw	r30, r24
+     f2c:	e2 0f       	add	r30, r18
+     f2e:	f3 1f       	adc	r31, r19
+     f30:	81 81       	ldd	r24, Z+1	; 0x01
+     f32:	0e 94 36 0d 	call	0x1a6c	; 0x1a6c <USART_voidSendInterruptByte>
+     f36:	54 c0       	rjmp	.+168    	; 0xfe0 <BCM_voidCheckAndStart+0x1b2>
 				}
 				break;
 			case SPI:
 				if(SPIQueueState != BUSY){
-    15ea:	80 91 6a 01 	lds	r24, 0x016A
-    15ee:	81 30       	cpi	r24, 0x01	; 1
-    15f0:	09 f4       	brne	.+2      	; 0x15f4 <BCM_voidCheckAndStart+0x114>
-    15f2:	4f c0       	rjmp	.+158    	; 0x1692 <BCM_voidCheckAndStart+0x1b2>
+     f38:	80 91 6a 01 	lds	r24, 0x016A
+     f3c:	81 30       	cpi	r24, 0x01	; 1
+     f3e:	09 f4       	brne	.+2      	; 0xf42 <BCM_voidCheckAndStart+0x114>
+     f40:	4f c0       	rjmp	.+158    	; 0xfe0 <BCM_voidCheckAndStart+0x1b2>
 					SPIQueueState = BUSY;
-    15f4:	81 e0       	ldi	r24, 0x01	; 1
-    15f6:	80 93 6a 01 	sts	0x016A, r24
+     f42:	81 e0       	ldi	r24, 0x01	; 1
+     f44:	80 93 6a 01 	sts	0x016A, r24
 					bcm_queue[index].state = BUSY;
-    15fa:	8b 81       	ldd	r24, Y+3	; 0x03
-    15fc:	28 2f       	mov	r18, r24
-    15fe:	30 e0       	ldi	r19, 0x00	; 0
-    1600:	c9 01       	movw	r24, r18
-    1602:	88 0f       	add	r24, r24
-    1604:	99 1f       	adc	r25, r25
-    1606:	88 0f       	add	r24, r24
-    1608:	99 1f       	adc	r25, r25
-    160a:	88 0f       	add	r24, r24
-    160c:	99 1f       	adc	r25, r25
-    160e:	28 0f       	add	r18, r24
-    1610:	39 1f       	adc	r19, r25
-    1612:	8c 81       	ldd	r24, Y+4	; 0x04
-    1614:	9d 81       	ldd	r25, Y+5	; 0x05
-    1616:	fc 01       	movw	r30, r24
-    1618:	e2 0f       	add	r30, r18
-    161a:	f3 1f       	adc	r31, r19
-    161c:	81 e0       	ldi	r24, 0x01	; 1
-    161e:	87 83       	std	Z+7, r24	; 0x07
+     f48:	8b 81       	ldd	r24, Y+3	; 0x03
+     f4a:	28 2f       	mov	r18, r24
+     f4c:	30 e0       	ldi	r19, 0x00	; 0
+     f4e:	c9 01       	movw	r24, r18
+     f50:	88 0f       	add	r24, r24
+     f52:	99 1f       	adc	r25, r25
+     f54:	88 0f       	add	r24, r24
+     f56:	99 1f       	adc	r25, r25
+     f58:	88 0f       	add	r24, r24
+     f5a:	99 1f       	adc	r25, r25
+     f5c:	28 0f       	add	r18, r24
+     f5e:	39 1f       	adc	r19, r25
+     f60:	8c 81       	ldd	r24, Y+4	; 0x04
+     f62:	9d 81       	ldd	r25, Y+5	; 0x05
+     f64:	fc 01       	movw	r30, r24
+     f66:	e2 0f       	add	r30, r18
+     f68:	f3 1f       	adc	r31, r19
+     f6a:	81 e0       	ldi	r24, 0x01	; 1
+     f6c:	87 83       	std	Z+7, r24	; 0x07
 					*state = BUSY;
-    1620:	e9 81       	ldd	r30, Y+1	; 0x01
-    1622:	fa 81       	ldd	r31, Y+2	; 0x02
-    1624:	81 e0       	ldi	r24, 0x01	; 1
-    1626:	80 83       	st	Z, r24
+     f6e:	e9 81       	ldd	r30, Y+1	; 0x01
+     f70:	fa 81       	ldd	r31, Y+2	; 0x02
+     f72:	81 e0       	ldi	r24, 0x01	; 1
+     f74:	80 83       	st	Z, r24
 					SPI_voidSendDataISR(bcm_queue[index].data);
-    1628:	8b 81       	ldd	r24, Y+3	; 0x03
-    162a:	28 2f       	mov	r18, r24
-    162c:	30 e0       	ldi	r19, 0x00	; 0
-    162e:	c9 01       	movw	r24, r18
-    1630:	88 0f       	add	r24, r24
-    1632:	99 1f       	adc	r25, r25
-    1634:	88 0f       	add	r24, r24
-    1636:	99 1f       	adc	r25, r25
-    1638:	88 0f       	add	r24, r24
-    163a:	99 1f       	adc	r25, r25
-    163c:	28 0f       	add	r18, r24
-    163e:	39 1f       	adc	r19, r25
-    1640:	8c 81       	ldd	r24, Y+4	; 0x04
-    1642:	9d 81       	ldd	r25, Y+5	; 0x05
-    1644:	fc 01       	movw	r30, r24
-    1646:	e2 0f       	add	r30, r18
-    1648:	f3 1f       	adc	r31, r19
-    164a:	81 81       	ldd	r24, Z+1	; 0x01
-    164c:	0e 94 6e 12 	call	0x24dc	; 0x24dc <SPI_voidSendDataISR>
-    1650:	20 c0       	rjmp	.+64     	; 0x1692 <BCM_voidCheckAndStart+0x1b2>
+     f76:	8b 81       	ldd	r24, Y+3	; 0x03
+     f78:	28 2f       	mov	r18, r24
+     f7a:	30 e0       	ldi	r19, 0x00	; 0
+     f7c:	c9 01       	movw	r24, r18
+     f7e:	88 0f       	add	r24, r24
+     f80:	99 1f       	adc	r25, r25
+     f82:	88 0f       	add	r24, r24
+     f84:	99 1f       	adc	r25, r25
+     f86:	88 0f       	add	r24, r24
+     f88:	99 1f       	adc	r25, r25
+     f8a:	28 0f       	add	r18, r24
+     f8c:	39 1f       	adc	r19, r25
+     f8e:	8c 81       	ldd	r24, Y+4	; 0x04
+     f90:	9d 81       	ldd	r25, Y+5	; 0x05
+     f92:	fc 01       	movw	r30, r24
+     f94:	e2 0f       	add	r30, r18
+     f96:	f3 1f       	adc	r31, r19
+     f98:	81 81       	ldd	r24, Z+1	; 0x01
+     f9a:	0e 94 6e 12 	call	0x24dc	; 0x24dc <SPI_voidSendDataISR>
+     f9e:	20 c0       	rjmp	.+64     	; 0xfe0 <BCM_voidCheckAndStart+0x1b2>
 				}
 				break;
 			case I2C:
 				if(I2CQueueState != BUSY){
-    1652:	80 91 6b 01 	lds	r24, 0x016B
-    1656:	81 30       	cpi	r24, 0x01	; 1
-    1658:	e1 f0       	breq	.+56     	; 0x1692 <BCM_voidCheckAndStart+0x1b2>
+     fa0:	80 91 6b 01 	lds	r24, 0x016B
+     fa4:	81 30       	cpi	r24, 0x01	; 1
+     fa6:	e1 f0       	breq	.+56     	; 0xfe0 <BCM_voidCheckAndStart+0x1b2>
 					I2CQueueState = BUSY;
-    165a:	81 e0       	ldi	r24, 0x01	; 1
-    165c:	80 93 6b 01 	sts	0x016B, r24
+     fa8:	81 e0       	ldi	r24, 0x01	; 1
+     faa:	80 93 6b 01 	sts	0x016B, r24
 					bcm_queue[index].state = BUSY;
-    1660:	8b 81       	ldd	r24, Y+3	; 0x03
-    1662:	28 2f       	mov	r18, r24
-    1664:	30 e0       	ldi	r19, 0x00	; 0
-    1666:	c9 01       	movw	r24, r18
-    1668:	88 0f       	add	r24, r24
-    166a:	99 1f       	adc	r25, r25
-    166c:	88 0f       	add	r24, r24
-    166e:	99 1f       	adc	r25, r25
-    1670:	88 0f       	add	r24, r24
-    1672:	99 1f       	adc	r25, r25
-    1674:	28 0f       	add	r18, r24
-    1676:	39 1f       	adc	r19, r25
-    1678:	8c 81       	ldd	r24, Y+4	; 0x04
-    167a:	9d 81       	ldd	r25, Y+5	; 0x05
-    167c:	fc 01       	movw	r30, r24
-    167e:	e2 0f       	add	r30, r18
-    1680:	f3 1f       	adc	r31, r19
-    1682:	81 e0       	ldi	r24, 0x01	; 1
-    1684:	87 83       	std	Z+7, r24	; 0x07
+     fae:	8b 81       	ldd	r24, Y+3	; 0x03
+     fb0:	28 2f       	mov	r18, r24
+     fb2:	30 e0       	ldi	r19, 0x00	; 0
+     fb4:	c9 01       	movw	r24, r18
+     fb6:	88 0f       	add	r24, r24
+     fb8:	99 1f       	adc	r25, r25
+     fba:	88 0f       	add	r24, r24
+     fbc:	99 1f       	adc	r25, r25
+     fbe:	88 0f       	add	r24, r24
+     fc0:	99 1f       	adc	r25, r25
+     fc2:	28 0f       	add	r18, r24
+     fc4:	39 1f       	adc	r19, r25
+     fc6:	8c 81       	ldd	r24, Y+4	; 0x04
+     fc8:	9d 81       	ldd	r25, Y+5	; 0x05
+     fca:	fc 01       	movw	r30, r24
+     fcc:	e2 0f       	add	r30, r18
+     fce:	f3 1f       	adc	r31, r19
+     fd0:	81 e0       	ldi	r24, 0x01	; 1
+     fd2:	87 83       	std	Z+7, r24	; 0x07
 					*state = BUSY;
-    1686:	e9 81       	ldd	r30, Y+1	; 0x01
-    1688:	fa 81       	ldd	r31, Y+2	; 0x02
-    168a:	81 e0       	ldi	r24, 0x01	; 1
-    168c:	80 83       	st	Z, r24
+     fd4:	e9 81       	ldd	r30, Y+1	; 0x01
+     fd6:	fa 81       	ldd	r31, Y+2	; 0x02
+     fd8:	81 e0       	ldi	r24, 0x01	; 1
+     fda:	80 83       	st	Z, r24
 					I2C_Master_INT_voidSendStartCond();
-    168e:	0e 94 23 14 	call	0x2846	; 0x2846 <I2C_Master_INT_voidSendStartCond>
+     fdc:	0e 94 23 14 	call	0x2846	; 0x2846 <I2C_Master_INT_voidSendStartCond>
 				}
 				break;
 			}
 		}
 	}
 }
-    1692:	27 96       	adiw	r28, 0x07	; 7
-    1694:	0f b6       	in	r0, 0x3f	; 63
-    1696:	f8 94       	cli
-    1698:	de bf       	out	0x3e, r29	; 62
-    169a:	0f be       	out	0x3f, r0	; 63
-    169c:	cd bf       	out	0x3d, r28	; 61
-    169e:	cf 91       	pop	r28
-    16a0:	df 91       	pop	r29
-    16a2:	08 95       	ret
+     fe0:	27 96       	adiw	r28, 0x07	; 7
+     fe2:	0f b6       	in	r0, 0x3f	; 63
+     fe4:	f8 94       	cli
+     fe6:	de bf       	out	0x3e, r29	; 62
+     fe8:	0f be       	out	0x3f, r0	; 63
+     fea:	cd bf       	out	0x3d, r28	; 61
+     fec:	cf 91       	pop	r28
+     fee:	df 91       	pop	r29
+     ff0:	08 95       	ret
 
-000016a4 <BCM_voidInit>:
+00000ff2 <BCM_voidSendQueuedData>:
+
+static void BCM_voidSendQueuedData(){
+     ff2:	df 93       	push	r29
+     ff4:	cf 93       	push	r28
+     ff6:	cd b7       	in	r28, 0x3d	; 61
+     ff8:	de b7       	in	r29, 0x3e	; 62
+	BCM_voidCheckAndStart(&generalQueueState, currentGeneralIndex, bcm_General_queue);
+     ffa:	40 91 ce 01 	lds	r20, 0x01CE
+     ffe:	88 e6       	ldi	r24, 0x68	; 104
+    1000:	91 e0       	ldi	r25, 0x01	; 1
+    1002:	22 ed       	ldi	r18, 0xD2	; 210
+    1004:	31 e0       	ldi	r19, 0x01	; 1
+    1006:	64 2f       	mov	r22, r20
+    1008:	a9 01       	movw	r20, r18
+    100a:	0e 94 17 07 	call	0xe2e	; 0xe2e <BCM_voidCheckAndStart>
+	BCM_voidCheckAndStart(&USARTQueueState, currentUSARTIndex, bcm_USART_queue);
+    100e:	40 91 cf 01 	lds	r20, 0x01CF
+    1012:	89 e6       	ldi	r24, 0x69	; 105
+    1014:	91 e0       	ldi	r25, 0x01	; 1
+    1016:	24 e9       	ldi	r18, 0x94	; 148
+    1018:	33 e0       	ldi	r19, 0x03	; 3
+    101a:	64 2f       	mov	r22, r20
+    101c:	a9 01       	movw	r20, r18
+    101e:	0e 94 17 07 	call	0xe2e	; 0xe2e <BCM_voidCheckAndStart>
+	BCM_voidCheckAndStart(&SPIQueueState, currentSPIIndex, bcm_SPI_queue);
+    1022:	40 91 d0 01 	lds	r20, 0x01D0
+    1026:	8a e6       	ldi	r24, 0x6A	; 106
+    1028:	91 e0       	ldi	r25, 0x01	; 1
+    102a:	28 e4       	ldi	r18, 0x48	; 72
+    102c:	34 e0       	ldi	r19, 0x04	; 4
+    102e:	64 2f       	mov	r22, r20
+    1030:	a9 01       	movw	r20, r18
+    1032:	0e 94 17 07 	call	0xe2e	; 0xe2e <BCM_voidCheckAndStart>
+	BCM_voidCheckAndStart(&I2CQueueState, currentI2CIndex, bcm_I2C_queue);
+    1036:	40 91 d1 01 	lds	r20, 0x01D1
+    103a:	8b e6       	ldi	r24, 0x6B	; 107
+    103c:	91 e0       	ldi	r25, 0x01	; 1
+    103e:	2c ef       	ldi	r18, 0xFC	; 252
+    1040:	34 e0       	ldi	r19, 0x04	; 4
+    1042:	64 2f       	mov	r22, r20
+    1044:	a9 01       	movw	r20, r18
+    1046:	0e 94 17 07 	call	0xe2e	; 0xe2e <BCM_voidCheckAndStart>
+}
+    104a:	cf 91       	pop	r28
+    104c:	df 91       	pop	r29
+    104e:	08 95       	ret
+
+00001050 <BCM_voidResetState>:
+
+static void BCM_voidResetState(volatile u8* index, volatile u8* state, volatile BCM bcm_queue[]){
+    1050:	df 93       	push	r29
+    1052:	cf 93       	push	r28
+    1054:	00 d0       	rcall	.+0      	; 0x1056 <BCM_voidResetState+0x6>
+    1056:	00 d0       	rcall	.+0      	; 0x1058 <BCM_voidResetState+0x8>
+    1058:	00 d0       	rcall	.+0      	; 0x105a <BCM_voidResetState+0xa>
+    105a:	cd b7       	in	r28, 0x3d	; 61
+    105c:	de b7       	in	r29, 0x3e	; 62
+    105e:	9a 83       	std	Y+2, r25	; 0x02
+    1060:	89 83       	std	Y+1, r24	; 0x01
+    1062:	7c 83       	std	Y+4, r23	; 0x04
+    1064:	6b 83       	std	Y+3, r22	; 0x03
+    1066:	5e 83       	std	Y+6, r21	; 0x06
+    1068:	4d 83       	std	Y+5, r20	; 0x05
+	bcm_queue[*index].state = DONE;
+    106a:	e9 81       	ldd	r30, Y+1	; 0x01
+    106c:	fa 81       	ldd	r31, Y+2	; 0x02
+    106e:	80 81       	ld	r24, Z
+    1070:	28 2f       	mov	r18, r24
+    1072:	30 e0       	ldi	r19, 0x00	; 0
+    1074:	c9 01       	movw	r24, r18
+    1076:	88 0f       	add	r24, r24
+    1078:	99 1f       	adc	r25, r25
+    107a:	88 0f       	add	r24, r24
+    107c:	99 1f       	adc	r25, r25
+    107e:	88 0f       	add	r24, r24
+    1080:	99 1f       	adc	r25, r25
+    1082:	28 0f       	add	r18, r24
+    1084:	39 1f       	adc	r19, r25
+    1086:	8d 81       	ldd	r24, Y+5	; 0x05
+    1088:	9e 81       	ldd	r25, Y+6	; 0x06
+    108a:	fc 01       	movw	r30, r24
+    108c:	e2 0f       	add	r30, r18
+    108e:	f3 1f       	adc	r31, r19
+    1090:	17 82       	std	Z+7, r1	; 0x07
+	if(bcm_queue[*index].Fun_PTR != NULL){
+    1092:	e9 81       	ldd	r30, Y+1	; 0x01
+    1094:	fa 81       	ldd	r31, Y+2	; 0x02
+    1096:	80 81       	ld	r24, Z
+    1098:	28 2f       	mov	r18, r24
+    109a:	30 e0       	ldi	r19, 0x00	; 0
+    109c:	c9 01       	movw	r24, r18
+    109e:	88 0f       	add	r24, r24
+    10a0:	99 1f       	adc	r25, r25
+    10a2:	88 0f       	add	r24, r24
+    10a4:	99 1f       	adc	r25, r25
+    10a6:	88 0f       	add	r24, r24
+    10a8:	99 1f       	adc	r25, r25
+    10aa:	28 0f       	add	r18, r24
+    10ac:	39 1f       	adc	r19, r25
+    10ae:	8d 81       	ldd	r24, Y+5	; 0x05
+    10b0:	9e 81       	ldd	r25, Y+6	; 0x06
+    10b2:	fc 01       	movw	r30, r24
+    10b4:	e2 0f       	add	r30, r18
+    10b6:	f3 1f       	adc	r31, r19
+    10b8:	82 81       	ldd	r24, Z+2	; 0x02
+    10ba:	93 81       	ldd	r25, Z+3	; 0x03
+    10bc:	00 97       	sbiw	r24, 0x00	; 0
+    10be:	b9 f0       	breq	.+46     	; 0x10ee <BCM_voidResetState+0x9e>
+		bcm_queue[*index].Fun_PTR();
+    10c0:	e9 81       	ldd	r30, Y+1	; 0x01
+    10c2:	fa 81       	ldd	r31, Y+2	; 0x02
+    10c4:	80 81       	ld	r24, Z
+    10c6:	28 2f       	mov	r18, r24
+    10c8:	30 e0       	ldi	r19, 0x00	; 0
+    10ca:	c9 01       	movw	r24, r18
+    10cc:	88 0f       	add	r24, r24
+    10ce:	99 1f       	adc	r25, r25
+    10d0:	88 0f       	add	r24, r24
+    10d2:	99 1f       	adc	r25, r25
+    10d4:	88 0f       	add	r24, r24
+    10d6:	99 1f       	adc	r25, r25
+    10d8:	28 0f       	add	r18, r24
+    10da:	39 1f       	adc	r19, r25
+    10dc:	8d 81       	ldd	r24, Y+5	; 0x05
+    10de:	9e 81       	ldd	r25, Y+6	; 0x06
+    10e0:	fc 01       	movw	r30, r24
+    10e2:	e2 0f       	add	r30, r18
+    10e4:	f3 1f       	adc	r31, r19
+    10e6:	02 80       	ldd	r0, Z+2	; 0x02
+    10e8:	f3 81       	ldd	r31, Z+3	; 0x03
+    10ea:	e0 2d       	mov	r30, r0
+    10ec:	09 95       	icall
+	}
+	(*index)++;
+    10ee:	e9 81       	ldd	r30, Y+1	; 0x01
+    10f0:	fa 81       	ldd	r31, Y+2	; 0x02
+    10f2:	80 81       	ld	r24, Z
+    10f4:	8f 5f       	subi	r24, 0xFF	; 255
+    10f6:	e9 81       	ldd	r30, Y+1	; 0x01
+    10f8:	fa 81       	ldd	r31, Y+2	; 0x02
+    10fa:	80 83       	st	Z, r24
+	*state = READY;
+    10fc:	eb 81       	ldd	r30, Y+3	; 0x03
+    10fe:	fc 81       	ldd	r31, Y+4	; 0x04
+    1100:	82 e0       	ldi	r24, 0x02	; 2
+    1102:	80 83       	st	Z, r24
+}
+    1104:	26 96       	adiw	r28, 0x06	; 6
+    1106:	0f b6       	in	r0, 0x3f	; 63
+    1108:	f8 94       	cli
+    110a:	de bf       	out	0x3e, r29	; 62
+    110c:	0f be       	out	0x3f, r0	; 63
+    110e:	cd bf       	out	0x3d, r28	; 61
+    1110:	cf 91       	pop	r28
+    1112:	df 91       	pop	r29
+    1114:	08 95       	ret
+
+00001116 <USARTTransmissionDone>:
+
+static void USARTTransmissionDone(){
+    1116:	df 93       	push	r29
+    1118:	cf 93       	push	r28
+    111a:	00 d0       	rcall	.+0      	; 0x111c <USARTTransmissionDone+0x6>
+    111c:	cd b7       	in	r28, 0x3d	; 61
+    111e:	de b7       	in	r29, 0x3e	; 62
+	if(bcm_USART_queue[currentUSARTIndex].state != BUSY){
+    1120:	80 91 cf 01 	lds	r24, 0x01CF
+    1124:	28 2f       	mov	r18, r24
+    1126:	30 e0       	ldi	r19, 0x00	; 0
+    1128:	c9 01       	movw	r24, r18
+    112a:	88 0f       	add	r24, r24
+    112c:	99 1f       	adc	r25, r25
+    112e:	88 0f       	add	r24, r24
+    1130:	99 1f       	adc	r25, r25
+    1132:	88 0f       	add	r24, r24
+    1134:	99 1f       	adc	r25, r25
+    1136:	82 0f       	add	r24, r18
+    1138:	93 1f       	adc	r25, r19
+    113a:	fc 01       	movw	r30, r24
+    113c:	e5 56       	subi	r30, 0x65	; 101
+    113e:	fc 4f       	sbci	r31, 0xFC	; 252
+    1140:	80 81       	ld	r24, Z
+    1142:	81 30       	cpi	r24, 0x01	; 1
+    1144:	c9 f0       	breq	.+50     	; 0x1178 <USARTTransmissionDone+0x62>
+		BCM_voidResetState(&currentGeneralIndex, &generalQueueState, bcm_General_queue);
+    1146:	8e ec       	ldi	r24, 0xCE	; 206
+    1148:	91 e0       	ldi	r25, 0x01	; 1
+    114a:	28 e6       	ldi	r18, 0x68	; 104
+    114c:	31 e0       	ldi	r19, 0x01	; 1
+    114e:	42 ed       	ldi	r20, 0xD2	; 210
+    1150:	51 e0       	ldi	r21, 0x01	; 1
+    1152:	b9 01       	movw	r22, r18
+    1154:	0e 94 28 08 	call	0x1050	; 0x1050 <BCM_voidResetState>
+		currentGeneralIndex = currentGeneralIndex > (MAX_GENERAL_QUEUE_SIZE - 1) ? 0 : currentGeneralIndex;
+    1158:	80 91 ce 01 	lds	r24, 0x01CE
+    115c:	82 33       	cpi	r24, 0x32	; 50
+    115e:	20 f4       	brcc	.+8      	; 0x1168 <USARTTransmissionDone+0x52>
+    1160:	80 91 ce 01 	lds	r24, 0x01CE
+    1164:	8a 83       	std	Y+2, r24	; 0x02
+    1166:	01 c0       	rjmp	.+2      	; 0x116a <USARTTransmissionDone+0x54>
+    1168:	1a 82       	std	Y+2, r1	; 0x02
+    116a:	8a 81       	ldd	r24, Y+2	; 0x02
+    116c:	80 93 ce 01 	sts	0x01CE, r24
+		USARTQueueState = READY;
+    1170:	82 e0       	ldi	r24, 0x02	; 2
+    1172:	80 93 69 01 	sts	0x0169, r24
+    1176:	15 c0       	rjmp	.+42     	; 0x11a2 <USARTTransmissionDone+0x8c>
+	}
+	else{
+		BCM_voidResetState(&currentUSARTIndex, &USARTQueueState, bcm_USART_queue);
+    1178:	8f ec       	ldi	r24, 0xCF	; 207
+    117a:	91 e0       	ldi	r25, 0x01	; 1
+    117c:	29 e6       	ldi	r18, 0x69	; 105
+    117e:	31 e0       	ldi	r19, 0x01	; 1
+    1180:	44 e9       	ldi	r20, 0x94	; 148
+    1182:	53 e0       	ldi	r21, 0x03	; 3
+    1184:	b9 01       	movw	r22, r18
+    1186:	0e 94 28 08 	call	0x1050	; 0x1050 <BCM_voidResetState>
+		currentUSARTIndex = currentUSARTIndex > (MAX_USART_QUEUE_SIZE - 1) ? 0 : currentUSARTIndex;
+    118a:	80 91 cf 01 	lds	r24, 0x01CF
+    118e:	84 31       	cpi	r24, 0x14	; 20
+    1190:	20 f4       	brcc	.+8      	; 0x119a <USARTTransmissionDone+0x84>
+    1192:	80 91 cf 01 	lds	r24, 0x01CF
+    1196:	89 83       	std	Y+1, r24	; 0x01
+    1198:	01 c0       	rjmp	.+2      	; 0x119c <USARTTransmissionDone+0x86>
+    119a:	19 82       	std	Y+1, r1	; 0x01
+    119c:	89 81       	ldd	r24, Y+1	; 0x01
+    119e:	80 93 cf 01 	sts	0x01CF, r24
+	}
+	BCM_voidSendQueuedData();
+    11a2:	0e 94 f9 07 	call	0xff2	; 0xff2 <BCM_voidSendQueuedData>
+}
+    11a6:	0f 90       	pop	r0
+    11a8:	0f 90       	pop	r0
+    11aa:	cf 91       	pop	r28
+    11ac:	df 91       	pop	r29
+    11ae:	08 95       	ret
+
+000011b0 <SPITransmissionDone>:
+
+static void SPITransmissionDone(){
+    11b0:	df 93       	push	r29
+    11b2:	cf 93       	push	r28
+    11b4:	00 d0       	rcall	.+0      	; 0x11b6 <SPITransmissionDone+0x6>
+    11b6:	cd b7       	in	r28, 0x3d	; 61
+    11b8:	de b7       	in	r29, 0x3e	; 62
+	if(bcm_SPI_queue[currentSPIIndex].state != BUSY){
+    11ba:	80 91 d0 01 	lds	r24, 0x01D0
+    11be:	28 2f       	mov	r18, r24
+    11c0:	30 e0       	ldi	r19, 0x00	; 0
+    11c2:	c9 01       	movw	r24, r18
+    11c4:	88 0f       	add	r24, r24
+    11c6:	99 1f       	adc	r25, r25
+    11c8:	88 0f       	add	r24, r24
+    11ca:	99 1f       	adc	r25, r25
+    11cc:	88 0f       	add	r24, r24
+    11ce:	99 1f       	adc	r25, r25
+    11d0:	82 0f       	add	r24, r18
+    11d2:	93 1f       	adc	r25, r19
+    11d4:	fc 01       	movw	r30, r24
+    11d6:	e1 5b       	subi	r30, 0xB1	; 177
+    11d8:	fb 4f       	sbci	r31, 0xFB	; 251
+    11da:	80 81       	ld	r24, Z
+    11dc:	81 30       	cpi	r24, 0x01	; 1
+    11de:	c9 f0       	breq	.+50     	; 0x1212 <SPITransmissionDone+0x62>
+		BCM_voidResetState(&currentGeneralIndex, &generalQueueState, bcm_General_queue);
+    11e0:	8e ec       	ldi	r24, 0xCE	; 206
+    11e2:	91 e0       	ldi	r25, 0x01	; 1
+    11e4:	28 e6       	ldi	r18, 0x68	; 104
+    11e6:	31 e0       	ldi	r19, 0x01	; 1
+    11e8:	42 ed       	ldi	r20, 0xD2	; 210
+    11ea:	51 e0       	ldi	r21, 0x01	; 1
+    11ec:	b9 01       	movw	r22, r18
+    11ee:	0e 94 28 08 	call	0x1050	; 0x1050 <BCM_voidResetState>
+		currentGeneralIndex = currentGeneralIndex > (MAX_GENERAL_QUEUE_SIZE - 1) ? 0 : currentGeneralIndex;
+    11f2:	80 91 ce 01 	lds	r24, 0x01CE
+    11f6:	82 33       	cpi	r24, 0x32	; 50
+    11f8:	20 f4       	brcc	.+8      	; 0x1202 <SPITransmissionDone+0x52>
+    11fa:	80 91 ce 01 	lds	r24, 0x01CE
+    11fe:	8a 83       	std	Y+2, r24	; 0x02
+    1200:	01 c0       	rjmp	.+2      	; 0x1204 <SPITransmissionDone+0x54>
+    1202:	1a 82       	std	Y+2, r1	; 0x02
+    1204:	8a 81       	ldd	r24, Y+2	; 0x02
+    1206:	80 93 ce 01 	sts	0x01CE, r24
+		SPIQueueState = READY;
+    120a:	82 e0       	ldi	r24, 0x02	; 2
+    120c:	80 93 6a 01 	sts	0x016A, r24
+    1210:	15 c0       	rjmp	.+42     	; 0x123c <SPITransmissionDone+0x8c>
+	}
+	else{
+		BCM_voidResetState(&currentSPIIndex, &SPIQueueState, bcm_SPI_queue);
+    1212:	80 ed       	ldi	r24, 0xD0	; 208
+    1214:	91 e0       	ldi	r25, 0x01	; 1
+    1216:	2a e6       	ldi	r18, 0x6A	; 106
+    1218:	31 e0       	ldi	r19, 0x01	; 1
+    121a:	48 e4       	ldi	r20, 0x48	; 72
+    121c:	54 e0       	ldi	r21, 0x04	; 4
+    121e:	b9 01       	movw	r22, r18
+    1220:	0e 94 28 08 	call	0x1050	; 0x1050 <BCM_voidResetState>
+		currentSPIIndex = currentSPIIndex > (MAX_SPI_QUEUE_SIZE - 1) ? 0 : currentSPIIndex;
+    1224:	80 91 d0 01 	lds	r24, 0x01D0
+    1228:	84 31       	cpi	r24, 0x14	; 20
+    122a:	20 f4       	brcc	.+8      	; 0x1234 <SPITransmissionDone+0x84>
+    122c:	80 91 d0 01 	lds	r24, 0x01D0
+    1230:	89 83       	std	Y+1, r24	; 0x01
+    1232:	01 c0       	rjmp	.+2      	; 0x1236 <SPITransmissionDone+0x86>
+    1234:	19 82       	std	Y+1, r1	; 0x01
+    1236:	89 81       	ldd	r24, Y+1	; 0x01
+    1238:	80 93 d0 01 	sts	0x01D0, r24
+	}
+	BCM_voidSendQueuedData();
+    123c:	0e 94 f9 07 	call	0xff2	; 0xff2 <BCM_voidSendQueuedData>
+}
+    1240:	0f 90       	pop	r0
+    1242:	0f 90       	pop	r0
+    1244:	cf 91       	pop	r28
+    1246:	df 91       	pop	r29
+    1248:	08 95       	ret
+
+0000124a <I2CTransmissionDone>:
+
+static void I2CTransmissionDone(){
+    124a:	df 93       	push	r29
+    124c:	cf 93       	push	r28
+    124e:	00 d0       	rcall	.+0      	; 0x1250 <I2CTransmissionDone+0x6>
+    1250:	cd b7       	in	r28, 0x3d	; 61
+    1252:	de b7       	in	r29, 0x3e	; 62
+	if(bcm_I2C_queue[currentI2CIndex].state != BUSY){
+    1254:	80 91 d1 01 	lds	r24, 0x01D1
+    1258:	28 2f       	mov	r18, r24
+    125a:	30 e0       	ldi	r19, 0x00	; 0
+    125c:	c9 01       	movw	r24, r18
+    125e:	88 0f       	add	r24, r24
+    1260:	99 1f       	adc	r25, r25
+    1262:	88 0f       	add	r24, r24
+    1264:	99 1f       	adc	r25, r25
+    1266:	88 0f       	add	r24, r24
+    1268:	99 1f       	adc	r25, r25
+    126a:	82 0f       	add	r24, r18
+    126c:	93 1f       	adc	r25, r19
+    126e:	fc 01       	movw	r30, r24
+    1270:	ed 5f       	subi	r30, 0xFD	; 253
+    1272:	fa 4f       	sbci	r31, 0xFA	; 250
+    1274:	80 81       	ld	r24, Z
+    1276:	81 30       	cpi	r24, 0x01	; 1
+    1278:	c9 f0       	breq	.+50     	; 0x12ac <I2CTransmissionDone+0x62>
+		BCM_voidResetState(&currentGeneralIndex, &generalQueueState, bcm_General_queue);
+    127a:	8e ec       	ldi	r24, 0xCE	; 206
+    127c:	91 e0       	ldi	r25, 0x01	; 1
+    127e:	28 e6       	ldi	r18, 0x68	; 104
+    1280:	31 e0       	ldi	r19, 0x01	; 1
+    1282:	42 ed       	ldi	r20, 0xD2	; 210
+    1284:	51 e0       	ldi	r21, 0x01	; 1
+    1286:	b9 01       	movw	r22, r18
+    1288:	0e 94 28 08 	call	0x1050	; 0x1050 <BCM_voidResetState>
+		currentGeneralIndex = currentGeneralIndex > (MAX_GENERAL_QUEUE_SIZE - 1) ? 0 : currentGeneralIndex;
+    128c:	80 91 ce 01 	lds	r24, 0x01CE
+    1290:	82 33       	cpi	r24, 0x32	; 50
+    1292:	20 f4       	brcc	.+8      	; 0x129c <I2CTransmissionDone+0x52>
+    1294:	80 91 ce 01 	lds	r24, 0x01CE
+    1298:	8a 83       	std	Y+2, r24	; 0x02
+    129a:	01 c0       	rjmp	.+2      	; 0x129e <I2CTransmissionDone+0x54>
+    129c:	1a 82       	std	Y+2, r1	; 0x02
+    129e:	8a 81       	ldd	r24, Y+2	; 0x02
+    12a0:	80 93 ce 01 	sts	0x01CE, r24
+		I2CQueueState = READY;
+    12a4:	82 e0       	ldi	r24, 0x02	; 2
+    12a6:	80 93 6b 01 	sts	0x016B, r24
+    12aa:	15 c0       	rjmp	.+42     	; 0x12d6 <I2CTransmissionDone+0x8c>
+	}
+	else{
+		BCM_voidResetState(&currentI2CIndex, &I2CQueueState, bcm_I2C_queue);
+    12ac:	81 ed       	ldi	r24, 0xD1	; 209
+    12ae:	91 e0       	ldi	r25, 0x01	; 1
+    12b0:	2b e6       	ldi	r18, 0x6B	; 107
+    12b2:	31 e0       	ldi	r19, 0x01	; 1
+    12b4:	4c ef       	ldi	r20, 0xFC	; 252
+    12b6:	54 e0       	ldi	r21, 0x04	; 4
+    12b8:	b9 01       	movw	r22, r18
+    12ba:	0e 94 28 08 	call	0x1050	; 0x1050 <BCM_voidResetState>
+		currentI2CIndex = currentI2CIndex > (MAX_I2C_QUEUE_SIZE - 1) ? 0 : currentI2CIndex;
+    12be:	80 91 d1 01 	lds	r24, 0x01D1
+    12c2:	84 31       	cpi	r24, 0x14	; 20
+    12c4:	20 f4       	brcc	.+8      	; 0x12ce <I2CTransmissionDone+0x84>
+    12c6:	80 91 d1 01 	lds	r24, 0x01D1
+    12ca:	89 83       	std	Y+1, r24	; 0x01
+    12cc:	01 c0       	rjmp	.+2      	; 0x12d0 <I2CTransmissionDone+0x86>
+    12ce:	19 82       	std	Y+1, r1	; 0x01
+    12d0:	89 81       	ldd	r24, Y+1	; 0x01
+    12d2:	80 93 d1 01 	sts	0x01D1, r24
+	}
+	BCM_voidSendQueuedData();
+    12d6:	0e 94 f9 07 	call	0xff2	; 0xff2 <BCM_voidSendQueuedData>
+}
+    12da:	0f 90       	pop	r0
+    12dc:	0f 90       	pop	r0
+    12de:	cf 91       	pop	r28
+    12e0:	df 91       	pop	r29
+    12e2:	08 95       	ret
+
+000012e4 <I2C_Callback>:
+
+static void I2C_Callback(){
+    12e4:	df 93       	push	r29
+    12e6:	cf 93       	push	r28
+    12e8:	cd b7       	in	r28, 0x3d	; 61
+    12ea:	de b7       	in	r29, 0x3e	; 62
+	if(interruptI2Cindex == 1){
+    12ec:	80 91 6c 01 	lds	r24, 0x016C
+    12f0:	81 30       	cpi	r24, 0x01	; 1
+    12f2:	09 f0       	breq	.+2      	; 0x12f6 <I2C_Callback+0x12>
+    12f4:	40 c0       	rjmp	.+128    	; 0x1376 <I2C_Callback+0x92>
+		interruptI2Cindex++;
+    12f6:	80 91 6c 01 	lds	r24, 0x016C
+    12fa:	8f 5f       	subi	r24, 0xFF	; 255
+    12fc:	80 93 6c 01 	sts	0x016C, r24
+		if(bcm_I2C_queue[currentI2CIndex].state != BUSY){
+    1300:	80 91 d1 01 	lds	r24, 0x01D1
+    1304:	28 2f       	mov	r18, r24
+    1306:	30 e0       	ldi	r19, 0x00	; 0
+    1308:	c9 01       	movw	r24, r18
+    130a:	88 0f       	add	r24, r24
+    130c:	99 1f       	adc	r25, r25
+    130e:	88 0f       	add	r24, r24
+    1310:	99 1f       	adc	r25, r25
+    1312:	88 0f       	add	r24, r24
+    1314:	99 1f       	adc	r25, r25
+    1316:	82 0f       	add	r24, r18
+    1318:	93 1f       	adc	r25, r19
+    131a:	fc 01       	movw	r30, r24
+    131c:	ed 5f       	subi	r30, 0xFD	; 253
+    131e:	fa 4f       	sbci	r31, 0xFA	; 250
+    1320:	80 81       	ld	r24, Z
+    1322:	81 30       	cpi	r24, 0x01	; 1
+    1324:	a1 f0       	breq	.+40     	; 0x134e <I2C_Callback+0x6a>
+			I2C_Master_INT_voidSendSlaveAddressWithWrite(bcm_General_queue[currentGeneralIndex].SlaveAddress);
+    1326:	80 91 ce 01 	lds	r24, 0x01CE
+    132a:	28 2f       	mov	r18, r24
+    132c:	30 e0       	ldi	r19, 0x00	; 0
+    132e:	c9 01       	movw	r24, r18
+    1330:	88 0f       	add	r24, r24
+    1332:	99 1f       	adc	r25, r25
+    1334:	88 0f       	add	r24, r24
+    1336:	99 1f       	adc	r25, r25
+    1338:	88 0f       	add	r24, r24
+    133a:	99 1f       	adc	r25, r25
+    133c:	82 0f       	add	r24, r18
+    133e:	93 1f       	adc	r25, r19
+    1340:	fc 01       	movw	r30, r24
+    1342:	ea 52       	subi	r30, 0x2A	; 42
+    1344:	fe 4f       	sbci	r31, 0xFE	; 254
+    1346:	80 81       	ld	r24, Z
+    1348:	0e 94 2e 14 	call	0x285c	; 0x285c <I2C_Master_INT_voidSendSlaveAddressWithWrite>
+    134c:	da c0       	rjmp	.+436    	; 0x1502 <I2C_Callback+0x21e>
+		}
+		else{
+			I2C_Master_INT_voidSendSlaveAddressWithWrite(bcm_I2C_queue[currentI2CIndex].SlaveAddress);
+    134e:	80 91 d1 01 	lds	r24, 0x01D1
+    1352:	28 2f       	mov	r18, r24
+    1354:	30 e0       	ldi	r19, 0x00	; 0
+    1356:	c9 01       	movw	r24, r18
+    1358:	88 0f       	add	r24, r24
+    135a:	99 1f       	adc	r25, r25
+    135c:	88 0f       	add	r24, r24
+    135e:	99 1f       	adc	r25, r25
+    1360:	88 0f       	add	r24, r24
+    1362:	99 1f       	adc	r25, r25
+    1364:	82 0f       	add	r24, r18
+    1366:	93 1f       	adc	r25, r19
+    1368:	fc 01       	movw	r30, r24
+    136a:	e0 50       	subi	r30, 0x00	; 0
+    136c:	fb 4f       	sbci	r31, 0xFB	; 251
+    136e:	80 81       	ld	r24, Z
+    1370:	0e 94 2e 14 	call	0x285c	; 0x285c <I2C_Master_INT_voidSendSlaveAddressWithWrite>
+    1374:	c6 c0       	rjmp	.+396    	; 0x1502 <I2C_Callback+0x21e>
+		}
+	}
+	else if(interruptI2Cindex == 2){
+    1376:	80 91 6c 01 	lds	r24, 0x016C
+    137a:	82 30       	cpi	r24, 0x02	; 2
+    137c:	09 f0       	breq	.+2      	; 0x1380 <I2C_Callback+0x9c>
+    137e:	b6 c0       	rjmp	.+364    	; 0x14ec <I2C_Callback+0x208>
+		if(bcm_I2C_queue[currentI2CIndex].state != BUSY){
+    1380:	80 91 d1 01 	lds	r24, 0x01D1
+    1384:	28 2f       	mov	r18, r24
+    1386:	30 e0       	ldi	r19, 0x00	; 0
+    1388:	c9 01       	movw	r24, r18
+    138a:	88 0f       	add	r24, r24
+    138c:	99 1f       	adc	r25, r25
+    138e:	88 0f       	add	r24, r24
+    1390:	99 1f       	adc	r25, r25
+    1392:	88 0f       	add	r24, r24
+    1394:	99 1f       	adc	r25, r25
+    1396:	82 0f       	add	r24, r18
+    1398:	93 1f       	adc	r25, r19
+    139a:	fc 01       	movw	r30, r24
+    139c:	ed 5f       	subi	r30, 0xFD	; 253
+    139e:	fa 4f       	sbci	r31, 0xFA	; 250
+    13a0:	80 81       	ld	r24, Z
+    13a2:	81 30       	cpi	r24, 0x01	; 1
+    13a4:	09 f4       	brne	.+2      	; 0x13a8 <I2C_Callback+0xc4>
+    13a6:	51 c0       	rjmp	.+162    	; 0x144a <I2C_Callback+0x166>
+			if(bcm_General_queue[currentGeneralIndex].RegAvailable == 1){
+    13a8:	80 91 ce 01 	lds	r24, 0x01CE
+    13ac:	28 2f       	mov	r18, r24
+    13ae:	30 e0       	ldi	r19, 0x00	; 0
+    13b0:	c9 01       	movw	r24, r18
+    13b2:	88 0f       	add	r24, r24
+    13b4:	99 1f       	adc	r25, r25
+    13b6:	88 0f       	add	r24, r24
+    13b8:	99 1f       	adc	r25, r25
+    13ba:	88 0f       	add	r24, r24
+    13bc:	99 1f       	adc	r25, r25
+    13be:	82 0f       	add	r24, r18
+    13c0:	93 1f       	adc	r25, r19
+    13c2:	fc 01       	movw	r30, r24
+    13c4:	e8 52       	subi	r30, 0x28	; 40
+    13c6:	fe 4f       	sbci	r31, 0xFE	; 254
+    13c8:	80 81       	ld	r24, Z
+    13ca:	81 30       	cpi	r24, 0x01	; 1
+    13cc:	29 f5       	brne	.+74     	; 0x1418 <I2C_Callback+0x134>
+				I2C_Master_INT_voidSendu8Data(bcm_General_queue[currentGeneralIndex].RegisterAddress);
+    13ce:	80 91 ce 01 	lds	r24, 0x01CE
+    13d2:	28 2f       	mov	r18, r24
+    13d4:	30 e0       	ldi	r19, 0x00	; 0
+    13d6:	c9 01       	movw	r24, r18
+    13d8:	88 0f       	add	r24, r24
+    13da:	99 1f       	adc	r25, r25
+    13dc:	88 0f       	add	r24, r24
+    13de:	99 1f       	adc	r25, r25
+    13e0:	88 0f       	add	r24, r24
+    13e2:	99 1f       	adc	r25, r25
+    13e4:	82 0f       	add	r24, r18
+    13e6:	93 1f       	adc	r25, r19
+    13e8:	fc 01       	movw	r30, r24
+    13ea:	e9 52       	subi	r30, 0x29	; 41
+    13ec:	fe 4f       	sbci	r31, 0xFE	; 254
+    13ee:	80 81       	ld	r24, Z
+    13f0:	0e 94 47 14 	call	0x288e	; 0x288e <I2C_Master_INT_voidSendu8Data>
+				bcm_General_queue[currentGeneralIndex].RegAvailable = 0;
+    13f4:	80 91 ce 01 	lds	r24, 0x01CE
+    13f8:	28 2f       	mov	r18, r24
+    13fa:	30 e0       	ldi	r19, 0x00	; 0
+    13fc:	c9 01       	movw	r24, r18
+    13fe:	88 0f       	add	r24, r24
+    1400:	99 1f       	adc	r25, r25
+    1402:	88 0f       	add	r24, r24
+    1404:	99 1f       	adc	r25, r25
+    1406:	88 0f       	add	r24, r24
+    1408:	99 1f       	adc	r25, r25
+    140a:	82 0f       	add	r24, r18
+    140c:	93 1f       	adc	r25, r19
+    140e:	fc 01       	movw	r30, r24
+    1410:	e8 52       	subi	r30, 0x28	; 40
+    1412:	fe 4f       	sbci	r31, 0xFE	; 254
+    1414:	10 82       	st	Z, r1
+    1416:	75 c0       	rjmp	.+234    	; 0x1502 <I2C_Callback+0x21e>
+			}
+			else{
+				interruptI2Cindex++;
+    1418:	80 91 6c 01 	lds	r24, 0x016C
+    141c:	8f 5f       	subi	r24, 0xFF	; 255
+    141e:	80 93 6c 01 	sts	0x016C, r24
+				I2C_Master_INT_voidSendu8Data(bcm_General_queue[currentGeneralIndex].data);
+    1422:	80 91 ce 01 	lds	r24, 0x01CE
+    1426:	28 2f       	mov	r18, r24
+    1428:	30 e0       	ldi	r19, 0x00	; 0
+    142a:	c9 01       	movw	r24, r18
+    142c:	88 0f       	add	r24, r24
+    142e:	99 1f       	adc	r25, r25
+    1430:	88 0f       	add	r24, r24
+    1432:	99 1f       	adc	r25, r25
+    1434:	88 0f       	add	r24, r24
+    1436:	99 1f       	adc	r25, r25
+    1438:	82 0f       	add	r24, r18
+    143a:	93 1f       	adc	r25, r19
+    143c:	fc 01       	movw	r30, r24
+    143e:	ed 52       	subi	r30, 0x2D	; 45
+    1440:	fe 4f       	sbci	r31, 0xFE	; 254
+    1442:	80 81       	ld	r24, Z
+    1444:	0e 94 47 14 	call	0x288e	; 0x288e <I2C_Master_INT_voidSendu8Data>
+    1448:	5c c0       	rjmp	.+184    	; 0x1502 <I2C_Callback+0x21e>
+			}
+		}
+		else{
+			if(bcm_I2C_queue[currentI2CIndex].RegAvailable == 1){
+    144a:	80 91 d1 01 	lds	r24, 0x01D1
+    144e:	28 2f       	mov	r18, r24
+    1450:	30 e0       	ldi	r19, 0x00	; 0
+    1452:	c9 01       	movw	r24, r18
+    1454:	88 0f       	add	r24, r24
+    1456:	99 1f       	adc	r25, r25
+    1458:	88 0f       	add	r24, r24
+    145a:	99 1f       	adc	r25, r25
+    145c:	88 0f       	add	r24, r24
+    145e:	99 1f       	adc	r25, r25
+    1460:	82 0f       	add	r24, r18
+    1462:	93 1f       	adc	r25, r19
+    1464:	fc 01       	movw	r30, r24
+    1466:	ee 5f       	subi	r30, 0xFE	; 254
+    1468:	fa 4f       	sbci	r31, 0xFA	; 250
+    146a:	80 81       	ld	r24, Z
+    146c:	81 30       	cpi	r24, 0x01	; 1
+    146e:	29 f5       	brne	.+74     	; 0x14ba <I2C_Callback+0x1d6>
+				I2C_Master_INT_voidSendu8Data(bcm_I2C_queue[currentI2CIndex].RegisterAddress);
+    1470:	80 91 d1 01 	lds	r24, 0x01D1
+    1474:	28 2f       	mov	r18, r24
+    1476:	30 e0       	ldi	r19, 0x00	; 0
+    1478:	c9 01       	movw	r24, r18
+    147a:	88 0f       	add	r24, r24
+    147c:	99 1f       	adc	r25, r25
+    147e:	88 0f       	add	r24, r24
+    1480:	99 1f       	adc	r25, r25
+    1482:	88 0f       	add	r24, r24
+    1484:	99 1f       	adc	r25, r25
+    1486:	82 0f       	add	r24, r18
+    1488:	93 1f       	adc	r25, r19
+    148a:	fc 01       	movw	r30, r24
+    148c:	ef 5f       	subi	r30, 0xFF	; 255
+    148e:	fa 4f       	sbci	r31, 0xFA	; 250
+    1490:	80 81       	ld	r24, Z
+    1492:	0e 94 47 14 	call	0x288e	; 0x288e <I2C_Master_INT_voidSendu8Data>
+				bcm_I2C_queue[currentI2CIndex].RegAvailable = 0;
+    1496:	80 91 d1 01 	lds	r24, 0x01D1
+    149a:	28 2f       	mov	r18, r24
+    149c:	30 e0       	ldi	r19, 0x00	; 0
+    149e:	c9 01       	movw	r24, r18
+    14a0:	88 0f       	add	r24, r24
+    14a2:	99 1f       	adc	r25, r25
+    14a4:	88 0f       	add	r24, r24
+    14a6:	99 1f       	adc	r25, r25
+    14a8:	88 0f       	add	r24, r24
+    14aa:	99 1f       	adc	r25, r25
+    14ac:	82 0f       	add	r24, r18
+    14ae:	93 1f       	adc	r25, r19
+    14b0:	fc 01       	movw	r30, r24
+    14b2:	ee 5f       	subi	r30, 0xFE	; 254
+    14b4:	fa 4f       	sbci	r31, 0xFA	; 250
+    14b6:	10 82       	st	Z, r1
+    14b8:	24 c0       	rjmp	.+72     	; 0x1502 <I2C_Callback+0x21e>
+			}
+			else{
+				interruptI2Cindex++;
+    14ba:	80 91 6c 01 	lds	r24, 0x016C
+    14be:	8f 5f       	subi	r24, 0xFF	; 255
+    14c0:	80 93 6c 01 	sts	0x016C, r24
+				I2C_Master_INT_voidSendu8Data(bcm_I2C_queue[currentI2CIndex].data);
+    14c4:	80 91 d1 01 	lds	r24, 0x01D1
+    14c8:	28 2f       	mov	r18, r24
+    14ca:	30 e0       	ldi	r19, 0x00	; 0
+    14cc:	c9 01       	movw	r24, r18
+    14ce:	88 0f       	add	r24, r24
+    14d0:	99 1f       	adc	r25, r25
+    14d2:	88 0f       	add	r24, r24
+    14d4:	99 1f       	adc	r25, r25
+    14d6:	88 0f       	add	r24, r24
+    14d8:	99 1f       	adc	r25, r25
+    14da:	82 0f       	add	r24, r18
+    14dc:	93 1f       	adc	r25, r19
+    14de:	fc 01       	movw	r30, r24
+    14e0:	e3 50       	subi	r30, 0x03	; 3
+    14e2:	fb 4f       	sbci	r31, 0xFB	; 251
+    14e4:	80 81       	ld	r24, Z
+    14e6:	0e 94 47 14 	call	0x288e	; 0x288e <I2C_Master_INT_voidSendu8Data>
+    14ea:	0b c0       	rjmp	.+22     	; 0x1502 <I2C_Callback+0x21e>
+			}
+		}
+	}
+	else if(interruptI2Cindex == 3){
+    14ec:	80 91 6c 01 	lds	r24, 0x016C
+    14f0:	83 30       	cpi	r24, 0x03	; 3
+    14f2:	39 f4       	brne	.+14     	; 0x1502 <I2C_Callback+0x21e>
+		interruptI2Cindex = 1;
+    14f4:	81 e0       	ldi	r24, 0x01	; 1
+    14f6:	80 93 6c 01 	sts	0x016C, r24
+		I2C_Master_INT_voidSendStopCond();
+    14fa:	0e 94 64 14 	call	0x28c8	; 0x28c8 <I2C_Master_INT_voidSendStopCond>
+		I2CTransmissionDone();
+    14fe:	0e 94 25 09 	call	0x124a	; 0x124a <I2CTransmissionDone>
+	}
+}
+    1502:	cf 91       	pop	r28
+    1504:	df 91       	pop	r29
+    1506:	08 95       	ret
+
+00001508 <BCM_structLoadData>:
+
+static BCM BCM_structLoadData(u8 data,BCM_COMM_Protocol protocol ,void(*Fun_PTR)(void), u8* SlaveAddress, u8* RegisterAddress, QUEUE_TYPE queueType){
+    1508:	cf 92       	push	r12
+    150a:	ef 92       	push	r14
+    150c:	ff 92       	push	r15
+    150e:	0f 93       	push	r16
+    1510:	1f 93       	push	r17
+    1512:	df 93       	push	r29
+    1514:	cf 93       	push	r28
+    1516:	cd b7       	in	r28, 0x3d	; 61
+    1518:	de b7       	in	r29, 0x3e	; 62
+    151a:	69 97       	sbiw	r28, 0x19	; 25
+    151c:	0f b6       	in	r0, 0x3f	; 63
+    151e:	f8 94       	cli
+    1520:	de bf       	out	0x3e, r29	; 62
+    1522:	0f be       	out	0x3f, r0	; 63
+    1524:	cd bf       	out	0x3d, r28	; 61
+    1526:	9c 8b       	std	Y+20, r25	; 0x14
+    1528:	8b 8b       	std	Y+19, r24	; 0x13
+    152a:	6a 87       	std	Y+10, r22	; 0x0a
+    152c:	4b 87       	std	Y+11, r20	; 0x0b
+    152e:	3d 87       	std	Y+13, r19	; 0x0d
+    1530:	2c 87       	std	Y+12, r18	; 0x0c
+    1532:	1f 87       	std	Y+15, r17	; 0x0f
+    1534:	0e 87       	std	Y+14, r16	; 0x0e
+    1536:	f9 8a       	std	Y+17, r15	; 0x11
+    1538:	e8 8a       	std	Y+16, r14	; 0x10
+    153a:	ca 8a       	std	Y+18, r12	; 0x12
+	BCM bcm;
+	bcm.data = data;
+    153c:	8a 85       	ldd	r24, Y+10	; 0x0a
+    153e:	8a 83       	std	Y+2, r24	; 0x02
+	bcm.protocol = protocol;
+    1540:	8b 85       	ldd	r24, Y+11	; 0x0b
+    1542:	89 83       	std	Y+1, r24	; 0x01
+	bcm.Fun_PTR = Fun_PTR;
+    1544:	8c 85       	ldd	r24, Y+12	; 0x0c
+    1546:	9d 85       	ldd	r25, Y+13	; 0x0d
+    1548:	9c 83       	std	Y+4, r25	; 0x04
+    154a:	8b 83       	std	Y+3, r24	; 0x03
+	bcm.state = DONE;
+    154c:	18 86       	std	Y+8, r1	; 0x08
+	bcm.type = queueType;
+    154e:	8a 89       	ldd	r24, Y+18	; 0x12
+    1550:	89 87       	std	Y+9, r24	; 0x09
+	if(SlaveAddress != NULL){
+    1552:	8e 85       	ldd	r24, Y+14	; 0x0e
+    1554:	9f 85       	ldd	r25, Y+15	; 0x0f
+    1556:	00 97       	sbiw	r24, 0x00	; 0
+    1558:	89 f0       	breq	.+34     	; 0x157c <BCM_structLoadData+0x74>
+		bcm.SlaveAddress = *SlaveAddress;
+    155a:	ee 85       	ldd	r30, Y+14	; 0x0e
+    155c:	ff 85       	ldd	r31, Y+15	; 0x0f
+    155e:	80 81       	ld	r24, Z
+    1560:	8d 83       	std	Y+5, r24	; 0x05
+		if(RegisterAddress != NULL){
+    1562:	88 89       	ldd	r24, Y+16	; 0x10
+    1564:	99 89       	ldd	r25, Y+17	; 0x11
+    1566:	00 97       	sbiw	r24, 0x00	; 0
+    1568:	39 f0       	breq	.+14     	; 0x1578 <BCM_structLoadData+0x70>
+			bcm.RegAvailable = 1;
+    156a:	81 e0       	ldi	r24, 0x01	; 1
+    156c:	8f 83       	std	Y+7, r24	; 0x07
+			bcm.RegisterAddress = *RegisterAddress;
+    156e:	e8 89       	ldd	r30, Y+16	; 0x10
+    1570:	f9 89       	ldd	r31, Y+17	; 0x11
+    1572:	80 81       	ld	r24, Z
+    1574:	8e 83       	std	Y+6, r24	; 0x06
+    1576:	04 c0       	rjmp	.+8      	; 0x1580 <BCM_structLoadData+0x78>
+		}
+		else{
+			bcm.RegAvailable = 0;
+    1578:	1f 82       	std	Y+7, r1	; 0x07
+    157a:	02 c0       	rjmp	.+4      	; 0x1580 <BCM_structLoadData+0x78>
+		}
+	}
+	else{
+		bcm.SlaveAddress = 0;
+    157c:	1d 82       	std	Y+5, r1	; 0x05
+		bcm.RegAvailable = 0;
+    157e:	1f 82       	std	Y+7, r1	; 0x07
+	}
+
+	return bcm;
+    1580:	8b 89       	ldd	r24, Y+19	; 0x13
+    1582:	9c 89       	ldd	r25, Y+20	; 0x14
+    1584:	9e 8b       	std	Y+22, r25	; 0x16
+    1586:	8d 8b       	std	Y+21, r24	; 0x15
+    1588:	fe 01       	movw	r30, r28
+    158a:	31 96       	adiw	r30, 0x01	; 1
+    158c:	f8 8f       	std	Y+24, r31	; 0x18
+    158e:	ef 8b       	std	Y+23, r30	; 0x17
+    1590:	f9 e0       	ldi	r31, 0x09	; 9
+    1592:	f9 8f       	std	Y+25, r31	; 0x19
+    1594:	ef 89       	ldd	r30, Y+23	; 0x17
+    1596:	f8 8d       	ldd	r31, Y+24	; 0x18
+    1598:	00 80       	ld	r0, Z
+    159a:	8f 89       	ldd	r24, Y+23	; 0x17
+    159c:	98 8d       	ldd	r25, Y+24	; 0x18
+    159e:	01 96       	adiw	r24, 0x01	; 1
+    15a0:	98 8f       	std	Y+24, r25	; 0x18
+    15a2:	8f 8b       	std	Y+23, r24	; 0x17
+    15a4:	ed 89       	ldd	r30, Y+21	; 0x15
+    15a6:	fe 89       	ldd	r31, Y+22	; 0x16
+    15a8:	00 82       	st	Z, r0
+    15aa:	8d 89       	ldd	r24, Y+21	; 0x15
+    15ac:	9e 89       	ldd	r25, Y+22	; 0x16
+    15ae:	01 96       	adiw	r24, 0x01	; 1
+    15b0:	9e 8b       	std	Y+22, r25	; 0x16
+    15b2:	8d 8b       	std	Y+21, r24	; 0x15
+    15b4:	99 8d       	ldd	r25, Y+25	; 0x19
+    15b6:	91 50       	subi	r25, 0x01	; 1
+    15b8:	99 8f       	std	Y+25, r25	; 0x19
+    15ba:	e9 8d       	ldd	r30, Y+25	; 0x19
+    15bc:	ee 23       	and	r30, r30
+    15be:	51 f7       	brne	.-44     	; 0x1594 <BCM_structLoadData+0x8c>
+}
+    15c0:	8b 89       	ldd	r24, Y+19	; 0x13
+    15c2:	9c 89       	ldd	r25, Y+20	; 0x14
+    15c4:	69 96       	adiw	r28, 0x19	; 25
+    15c6:	0f b6       	in	r0, 0x3f	; 63
+    15c8:	f8 94       	cli
+    15ca:	de bf       	out	0x3e, r29	; 62
+    15cc:	0f be       	out	0x3f, r0	; 63
+    15ce:	cd bf       	out	0x3d, r28	; 61
+    15d0:	cf 91       	pop	r28
+    15d2:	df 91       	pop	r29
+    15d4:	1f 91       	pop	r17
+    15d6:	0f 91       	pop	r16
+    15d8:	ff 90       	pop	r15
+    15da:	ef 90       	pop	r14
+    15dc:	cf 90       	pop	r12
+    15de:	08 95       	ret
+
+000015e0 <BCM_voidAddProtocol>:
+
+static void BCM_voidAddProtocol(BCM bcm, volatile u8* index, volatile BCM bcm_queue[]){
+    15e0:	cf 92       	push	r12
+    15e2:	df 92       	push	r13
+    15e4:	ef 92       	push	r14
+    15e6:	ff 92       	push	r15
+    15e8:	0f 93       	push	r16
+    15ea:	1f 93       	push	r17
+    15ec:	df 93       	push	r29
+    15ee:	cf 93       	push	r28
+    15f0:	cd b7       	in	r28, 0x3d	; 61
+    15f2:	de b7       	in	r29, 0x3e	; 62
+    15f4:	62 97       	sbiw	r28, 0x12	; 18
+    15f6:	0f b6       	in	r0, 0x3f	; 63
+    15f8:	f8 94       	cli
+    15fa:	de bf       	out	0x3e, r29	; 62
+    15fc:	0f be       	out	0x3f, r0	; 63
+    15fe:	cd bf       	out	0x3d, r28	; 61
+    1600:	09 83       	std	Y+1, r16	; 0x01
+    1602:	1a 83       	std	Y+2, r17	; 0x02
+    1604:	2b 83       	std	Y+3, r18	; 0x03
+    1606:	3c 83       	std	Y+4, r19	; 0x04
+    1608:	4d 83       	std	Y+5, r20	; 0x05
+    160a:	5e 83       	std	Y+6, r21	; 0x06
+    160c:	6f 83       	std	Y+7, r22	; 0x07
+    160e:	78 87       	std	Y+8, r23	; 0x08
+    1610:	89 87       	std	Y+9, r24	; 0x09
+    1612:	fb 86       	std	Y+11, r15	; 0x0b
+    1614:	ea 86       	std	Y+10, r14	; 0x0a
+    1616:	dd 86       	std	Y+13, r13	; 0x0d
+    1618:	cc 86       	std	Y+12, r12	; 0x0c
+	if(bcm_queue[*index].state == DONE){
+    161a:	ea 85       	ldd	r30, Y+10	; 0x0a
+    161c:	fb 85       	ldd	r31, Y+11	; 0x0b
+    161e:	80 81       	ld	r24, Z
+    1620:	28 2f       	mov	r18, r24
+    1622:	30 e0       	ldi	r19, 0x00	; 0
+    1624:	c9 01       	movw	r24, r18
+    1626:	88 0f       	add	r24, r24
+    1628:	99 1f       	adc	r25, r25
+    162a:	88 0f       	add	r24, r24
+    162c:	99 1f       	adc	r25, r25
+    162e:	88 0f       	add	r24, r24
+    1630:	99 1f       	adc	r25, r25
+    1632:	28 0f       	add	r18, r24
+    1634:	39 1f       	adc	r19, r25
+    1636:	8c 85       	ldd	r24, Y+12	; 0x0c
+    1638:	9d 85       	ldd	r25, Y+13	; 0x0d
+    163a:	fc 01       	movw	r30, r24
+    163c:	e2 0f       	add	r30, r18
+    163e:	f3 1f       	adc	r31, r19
+    1640:	87 81       	ldd	r24, Z+7	; 0x07
+    1642:	88 23       	and	r24, r24
+    1644:	09 f0       	breq	.+2      	; 0x1648 <BCM_voidAddProtocol+0x68>
+    1646:	4c c0       	rjmp	.+152    	; 0x16e0 <BCM_voidAddProtocol+0x100>
+		bcm_queue[*index] = bcm;
+    1648:	ea 85       	ldd	r30, Y+10	; 0x0a
+    164a:	fb 85       	ldd	r31, Y+11	; 0x0b
+    164c:	80 81       	ld	r24, Z
+    164e:	28 2f       	mov	r18, r24
+    1650:	30 e0       	ldi	r19, 0x00	; 0
+    1652:	c9 01       	movw	r24, r18
+    1654:	88 0f       	add	r24, r24
+    1656:	99 1f       	adc	r25, r25
+    1658:	88 0f       	add	r24, r24
+    165a:	99 1f       	adc	r25, r25
+    165c:	88 0f       	add	r24, r24
+    165e:	99 1f       	adc	r25, r25
+    1660:	28 0f       	add	r18, r24
+    1662:	39 1f       	adc	r19, r25
+    1664:	8c 85       	ldd	r24, Y+12	; 0x0c
+    1666:	9d 85       	ldd	r25, Y+13	; 0x0d
+    1668:	82 0f       	add	r24, r18
+    166a:	93 1f       	adc	r25, r19
+    166c:	9f 87       	std	Y+15, r25	; 0x0f
+    166e:	8e 87       	std	Y+14, r24	; 0x0e
+    1670:	ce 01       	movw	r24, r28
+    1672:	01 96       	adiw	r24, 0x01	; 1
+    1674:	99 8b       	std	Y+17, r25	; 0x11
+    1676:	88 8b       	std	Y+16, r24	; 0x10
+    1678:	99 e0       	ldi	r25, 0x09	; 9
+    167a:	9a 8b       	std	Y+18, r25	; 0x12
+    167c:	e8 89       	ldd	r30, Y+16	; 0x10
+    167e:	f9 89       	ldd	r31, Y+17	; 0x11
+    1680:	00 80       	ld	r0, Z
+    1682:	88 89       	ldd	r24, Y+16	; 0x10
+    1684:	99 89       	ldd	r25, Y+17	; 0x11
+    1686:	01 96       	adiw	r24, 0x01	; 1
+    1688:	99 8b       	std	Y+17, r25	; 0x11
+    168a:	88 8b       	std	Y+16, r24	; 0x10
+    168c:	ee 85       	ldd	r30, Y+14	; 0x0e
+    168e:	ff 85       	ldd	r31, Y+15	; 0x0f
+    1690:	00 82       	st	Z, r0
+    1692:	8e 85       	ldd	r24, Y+14	; 0x0e
+    1694:	9f 85       	ldd	r25, Y+15	; 0x0f
+    1696:	01 96       	adiw	r24, 0x01	; 1
+    1698:	9f 87       	std	Y+15, r25	; 0x0f
+    169a:	8e 87       	std	Y+14, r24	; 0x0e
+    169c:	9a 89       	ldd	r25, Y+18	; 0x12
+    169e:	91 50       	subi	r25, 0x01	; 1
+    16a0:	9a 8b       	std	Y+18, r25	; 0x12
+    16a2:	ea 89       	ldd	r30, Y+18	; 0x12
+    16a4:	ee 23       	and	r30, r30
+    16a6:	51 f7       	brne	.-44     	; 0x167c <BCM_voidAddProtocol+0x9c>
+		bcm_queue[*index].state = READY;
+    16a8:	ea 85       	ldd	r30, Y+10	; 0x0a
+    16aa:	fb 85       	ldd	r31, Y+11	; 0x0b
+    16ac:	80 81       	ld	r24, Z
+    16ae:	28 2f       	mov	r18, r24
+    16b0:	30 e0       	ldi	r19, 0x00	; 0
+    16b2:	c9 01       	movw	r24, r18
+    16b4:	88 0f       	add	r24, r24
+    16b6:	99 1f       	adc	r25, r25
+    16b8:	88 0f       	add	r24, r24
+    16ba:	99 1f       	adc	r25, r25
+    16bc:	88 0f       	add	r24, r24
+    16be:	99 1f       	adc	r25, r25
+    16c0:	28 0f       	add	r18, r24
+    16c2:	39 1f       	adc	r19, r25
+    16c4:	8c 85       	ldd	r24, Y+12	; 0x0c
+    16c6:	9d 85       	ldd	r25, Y+13	; 0x0d
+    16c8:	fc 01       	movw	r30, r24
+    16ca:	e2 0f       	add	r30, r18
+    16cc:	f3 1f       	adc	r31, r19
+    16ce:	82 e0       	ldi	r24, 0x02	; 2
+    16d0:	87 83       	std	Z+7, r24	; 0x07
+		(*index)++;
+    16d2:	ea 85       	ldd	r30, Y+10	; 0x0a
+    16d4:	fb 85       	ldd	r31, Y+11	; 0x0b
+    16d6:	80 81       	ld	r24, Z
+    16d8:	8f 5f       	subi	r24, 0xFF	; 255
+    16da:	ea 85       	ldd	r30, Y+10	; 0x0a
+    16dc:	fb 85       	ldd	r31, Y+11	; 0x0b
+    16de:	80 83       	st	Z, r24
+	}
+	BCM_voidSendQueuedData();
+    16e0:	0e 94 f9 07 	call	0xff2	; 0xff2 <BCM_voidSendQueuedData>
+}
+    16e4:	62 96       	adiw	r28, 0x12	; 18
+    16e6:	0f b6       	in	r0, 0x3f	; 63
+    16e8:	f8 94       	cli
+    16ea:	de bf       	out	0x3e, r29	; 62
+    16ec:	0f be       	out	0x3f, r0	; 63
+    16ee:	cd bf       	out	0x3d, r28	; 61
+    16f0:	cf 91       	pop	r28
+    16f2:	df 91       	pop	r29
+    16f4:	1f 91       	pop	r17
+    16f6:	0f 91       	pop	r16
+    16f8:	ff 90       	pop	r15
+    16fa:	ef 90       	pop	r14
+    16fc:	df 90       	pop	r13
+    16fe:	cf 90       	pop	r12
+    1700:	08 95       	ret
+
+00001702 <BCM_voidInit>:
 
 void BCM_voidInit(){
-    16a4:	df 93       	push	r29
-    16a6:	cf 93       	push	r28
-    16a8:	cd b7       	in	r28, 0x3d	; 61
-    16aa:	de b7       	in	r29, 0x3e	; 62
+    1702:	df 93       	push	r29
+    1704:	cf 93       	push	r28
+    1706:	cd b7       	in	r28, 0x3d	; 61
+    1708:	de b7       	in	r29, 0x3e	; 62
 	GIE_voidEnable();
-    16ac:	0e 94 b4 14 	call	0x2968	; 0x2968 <GIE_voidEnable>
+    170a:	0e 94 b4 14 	call	0x2968	; 0x2968 <GIE_voidEnable>
 #if USART_PROTOCOL == BCM_ENABLE
 	USART_voidEnableTXCInterrupt();
-    16b0:	0e 94 00 0d 	call	0x1a00	; 0x1a00 <USART_voidEnableTXCInterrupt>
+    170e:	0e 94 00 0d 	call	0x1a00	; 0x1a00 <USART_voidEnableTXCInterrupt>
 	USART_voidTXCSetCallBack(USARTTransmissionDone);
-    16b4:	8a e7       	ldi	r24, 0x7A	; 122
-    16b6:	97 e0       	ldi	r25, 0x07	; 7
-    16b8:	0e 94 c2 0d 	call	0x1b84	; 0x1b84 <USART_voidTXCSetCallBack>
+    1712:	8b e8       	ldi	r24, 0x8B	; 139
+    1714:	98 e0       	ldi	r25, 0x08	; 8
+    1716:	0e 94 c2 0d 	call	0x1b84	; 0x1b84 <USART_voidTXCSetCallBack>
 	USART_voidInit();
-    16bc:	0e 94 66 0c 	call	0x18cc	; 0x18cc <USART_voidInit>
+    171a:	0e 94 66 0c 	call	0x18cc	; 0x18cc <USART_voidInit>
 #endif
 
 #if SPI_PROTOCOL == BCM_ENABLE
 	SPI_voidSetCallBack(SPITransmissionDone);
-    16c0:	87 ec       	ldi	r24, 0xC7	; 199
-    16c2:	97 e0       	ldi	r25, 0x07	; 7
-    16c4:	0e 94 52 12 	call	0x24a4	; 0x24a4 <SPI_voidSetCallBack>
+    171e:	88 ed       	ldi	r24, 0xD8	; 216
+    1720:	98 e0       	ldi	r25, 0x08	; 8
+    1722:	0e 94 52 12 	call	0x24a4	; 0x24a4 <SPI_voidSetCallBack>
 	SPI_voidMasterInit();
-    16c8:	0e 94 d3 11 	call	0x23a6	; 0x23a6 <SPI_voidMasterInit>
+    1726:	0e 94 d3 11 	call	0x23a6	; 0x23a6 <SPI_voidMasterInit>
 #endif
 
 #if I2C_PROTOCOL == BCM_ENABLE
 	I2C_voidSetCallBack(I2C_Callback);
-    16cc:	81 e6       	ldi	r24, 0x61	; 97
-    16ce:	98 e0       	ldi	r25, 0x08	; 8
-    16d0:	0e 94 6f 14 	call	0x28de	; 0x28de <I2C_voidSetCallBack>
+    172a:	82 e7       	ldi	r24, 0x72	; 114
+    172c:	99 e0       	ldi	r25, 0x09	; 9
+    172e:	0e 94 6f 14 	call	0x28de	; 0x28de <I2C_voidSetCallBack>
 	I2C_Master_voidInit();
-    16d4:	0e 94 af 12 	call	0x255e	; 0x255e <I2C_Master_voidInit>
+    1732:	0e 94 af 12 	call	0x255e	; 0x255e <I2C_Master_voidInit>
 #endif
 }
-    16d8:	cf 91       	pop	r28
-    16da:	df 91       	pop	r29
-    16dc:	08 95       	ret
+    1736:	cf 91       	pop	r28
+    1738:	df 91       	pop	r29
+    173a:	08 95       	ret
 
-000016de <BCM_voidAddToQueue>:
+0000173c <BCM_voidAddToQueue>:
 
 void BCM_voidAddToQueue(u8 data,BCM_COMM_Protocol protocol ,void(*Fun_PTR)(void), u8* SlaveAddress, u8* RegisterAddress, QUEUE_TYPE queueType){
-    16de:	cf 92       	push	r12
-    16e0:	df 92       	push	r13
-    16e2:	ef 92       	push	r14
-    16e4:	ff 92       	push	r15
-    16e6:	0f 93       	push	r16
-    16e8:	1f 93       	push	r17
-    16ea:	df 93       	push	r29
-    16ec:	cf 93       	push	r28
-    16ee:	cd b7       	in	r28, 0x3d	; 61
-    16f0:	de b7       	in	r29, 0x3e	; 62
-    16f2:	68 97       	sbiw	r28, 0x18	; 24
-    16f4:	0f b6       	in	r0, 0x3f	; 63
-    16f6:	f8 94       	cli
-    16f8:	de bf       	out	0x3e, r29	; 62
-    16fa:	0f be       	out	0x3f, r0	; 63
-    16fc:	cd bf       	out	0x3d, r28	; 61
-    16fe:	8a 87       	std	Y+10, r24	; 0x0a
-    1700:	6b 87       	std	Y+11, r22	; 0x0b
-    1702:	5d 87       	std	Y+13, r21	; 0x0d
-    1704:	4c 87       	std	Y+12, r20	; 0x0c
-    1706:	3f 87       	std	Y+15, r19	; 0x0f
-    1708:	2e 87       	std	Y+14, r18	; 0x0e
-    170a:	19 8b       	std	Y+17, r17	; 0x11
-    170c:	08 8b       	std	Y+16, r16	; 0x10
-    170e:	ea 8a       	std	Y+18, r14	; 0x12
+    173c:	cf 92       	push	r12
+    173e:	df 92       	push	r13
+    1740:	ef 92       	push	r14
+    1742:	ff 92       	push	r15
+    1744:	0f 93       	push	r16
+    1746:	1f 93       	push	r17
+    1748:	df 93       	push	r29
+    174a:	cf 93       	push	r28
+    174c:	cd b7       	in	r28, 0x3d	; 61
+    174e:	de b7       	in	r29, 0x3e	; 62
+    1750:	68 97       	sbiw	r28, 0x18	; 24
+    1752:	0f b6       	in	r0, 0x3f	; 63
+    1754:	f8 94       	cli
+    1756:	de bf       	out	0x3e, r29	; 62
+    1758:	0f be       	out	0x3f, r0	; 63
+    175a:	cd bf       	out	0x3d, r28	; 61
+    175c:	8a 87       	std	Y+10, r24	; 0x0a
+    175e:	6b 87       	std	Y+11, r22	; 0x0b
+    1760:	5d 87       	std	Y+13, r21	; 0x0d
+    1762:	4c 87       	std	Y+12, r20	; 0x0c
+    1764:	3f 87       	std	Y+15, r19	; 0x0f
+    1766:	2e 87       	std	Y+14, r18	; 0x0e
+    1768:	19 8b       	std	Y+17, r17	; 0x11
+    176a:	08 8b       	std	Y+16, r16	; 0x10
+    176c:	ea 8a       	std	Y+18, r14	; 0x12
 	BCM bcm = BCM_structLoadData(data, protocol, Fun_PTR, SlaveAddress, RegisterAddress, queueType);
-    1710:	2c 85       	ldd	r18, Y+12	; 0x0c
-    1712:	3d 85       	ldd	r19, Y+13	; 0x0d
-    1714:	ee 85       	ldd	r30, Y+14	; 0x0e
-    1716:	ff 85       	ldd	r31, Y+15	; 0x0f
-    1718:	a8 89       	ldd	r26, Y+16	; 0x10
-    171a:	b9 89       	ldd	r27, Y+17	; 0x11
-    171c:	ce 01       	movw	r24, r28
-    171e:	01 96       	adiw	r24, 0x01	; 1
-    1720:	6a 85       	ldd	r22, Y+10	; 0x0a
-    1722:	4b 85       	ldd	r20, Y+11	; 0x0b
-    1724:	8f 01       	movw	r16, r30
-    1726:	7d 01       	movw	r14, r26
-    1728:	ca 88       	ldd	r12, Y+18	; 0x12
-    172a:	0e 94 73 09 	call	0x12e6	; 0x12e6 <BCM_structLoadData>
+    176e:	2c 85       	ldd	r18, Y+12	; 0x0c
+    1770:	3d 85       	ldd	r19, Y+13	; 0x0d
+    1772:	ee 85       	ldd	r30, Y+14	; 0x0e
+    1774:	ff 85       	ldd	r31, Y+15	; 0x0f
+    1776:	a8 89       	ldd	r26, Y+16	; 0x10
+    1778:	b9 89       	ldd	r27, Y+17	; 0x11
+    177a:	ce 01       	movw	r24, r28
+    177c:	01 96       	adiw	r24, 0x01	; 1
+    177e:	6a 85       	ldd	r22, Y+10	; 0x0a
+    1780:	4b 85       	ldd	r20, Y+11	; 0x0b
+    1782:	8f 01       	movw	r16, r30
+    1784:	7d 01       	movw	r14, r26
+    1786:	ca 88       	ldd	r12, Y+18	; 0x12
+    1788:	0e 94 84 0a 	call	0x1508	; 0x1508 <BCM_structLoadData>
 	if(queueType == GENERAL){
-    172e:	8a 89       	ldd	r24, Y+18	; 0x12
-    1730:	88 23       	and	r24, r24
-    1732:	f1 f4       	brne	.+60     	; 0x1770 <BCM_voidAddToQueue+0x92>
+    178c:	8a 89       	ldd	r24, Y+18	; 0x12
+    178e:	88 23       	and	r24, r24
+    1790:	f1 f4       	brne	.+60     	; 0x17ce <BCM_voidAddToQueue+0x92>
 		generalQueueIndex = generalQueueIndex > (MAX_GENERAL_QUEUE_SIZE - 1) ? 0 : generalQueueIndex;
-    1734:	80 91 ca 01 	lds	r24, 0x01CA
-    1738:	82 33       	cpi	r24, 0x32	; 50
-    173a:	20 f4       	brcc	.+8      	; 0x1744 <BCM_voidAddToQueue+0x66>
-    173c:	20 91 ca 01 	lds	r18, 0x01CA
-    1740:	28 8f       	std	Y+24, r18	; 0x18
-    1742:	01 c0       	rjmp	.+2      	; 0x1746 <BCM_voidAddToQueue+0x68>
-    1744:	18 8e       	std	Y+24, r1	; 0x18
-    1746:	38 8d       	ldd	r19, Y+24	; 0x18
-    1748:	30 93 ca 01 	sts	0x01CA, r19
+    1792:	80 91 ca 01 	lds	r24, 0x01CA
+    1796:	82 33       	cpi	r24, 0x32	; 50
+    1798:	20 f4       	brcc	.+8      	; 0x17a2 <BCM_voidAddToQueue+0x66>
+    179a:	20 91 ca 01 	lds	r18, 0x01CA
+    179e:	28 8f       	std	Y+24, r18	; 0x18
+    17a0:	01 c0       	rjmp	.+2      	; 0x17a4 <BCM_voidAddToQueue+0x68>
+    17a2:	18 8e       	std	Y+24, r1	; 0x18
+    17a4:	38 8d       	ldd	r19, Y+24	; 0x18
+    17a6:	30 93 ca 01 	sts	0x01CA, r19
 		BCM_voidAddProtocol(bcm, &generalQueueIndex, bcm_General_queue);
-    174c:	ea ec       	ldi	r30, 0xCA	; 202
-    174e:	f1 e0       	ldi	r31, 0x01	; 1
-    1750:	a2 ed       	ldi	r26, 0xD2	; 210
-    1752:	b1 e0       	ldi	r27, 0x01	; 1
-    1754:	09 81       	ldd	r16, Y+1	; 0x01
-    1756:	1a 81       	ldd	r17, Y+2	; 0x02
-    1758:	2b 81       	ldd	r18, Y+3	; 0x03
-    175a:	3c 81       	ldd	r19, Y+4	; 0x04
-    175c:	4d 81       	ldd	r20, Y+5	; 0x05
-    175e:	5e 81       	ldd	r21, Y+6	; 0x06
-    1760:	6f 81       	ldd	r22, Y+7	; 0x07
-    1762:	78 85       	ldd	r23, Y+8	; 0x08
-    1764:	89 85       	ldd	r24, Y+9	; 0x09
-    1766:	7f 01       	movw	r14, r30
-    1768:	6d 01       	movw	r12, r26
-    176a:	0e 94 df 09 	call	0x13be	; 0x13be <BCM_voidAddProtocol>
-    176e:	6e c0       	rjmp	.+220    	; 0x184c <BCM_voidAddToQueue+0x16e>
+    17aa:	ea ec       	ldi	r30, 0xCA	; 202
+    17ac:	f1 e0       	ldi	r31, 0x01	; 1
+    17ae:	a2 ed       	ldi	r26, 0xD2	; 210
+    17b0:	b1 e0       	ldi	r27, 0x01	; 1
+    17b2:	09 81       	ldd	r16, Y+1	; 0x01
+    17b4:	1a 81       	ldd	r17, Y+2	; 0x02
+    17b6:	2b 81       	ldd	r18, Y+3	; 0x03
+    17b8:	3c 81       	ldd	r19, Y+4	; 0x04
+    17ba:	4d 81       	ldd	r20, Y+5	; 0x05
+    17bc:	5e 81       	ldd	r21, Y+6	; 0x06
+    17be:	6f 81       	ldd	r22, Y+7	; 0x07
+    17c0:	78 85       	ldd	r23, Y+8	; 0x08
+    17c2:	89 85       	ldd	r24, Y+9	; 0x09
+    17c4:	7f 01       	movw	r14, r30
+    17c6:	6d 01       	movw	r12, r26
+    17c8:	0e 94 f0 0a 	call	0x15e0	; 0x15e0 <BCM_voidAddProtocol>
+    17cc:	6e c0       	rjmp	.+220    	; 0x18aa <BCM_voidAddToQueue+0x16e>
 	}
 	else{
 		switch(protocol){
-    1770:	8b 85       	ldd	r24, Y+11	; 0x0b
-    1772:	28 2f       	mov	r18, r24
-    1774:	30 e0       	ldi	r19, 0x00	; 0
-    1776:	3f 8b       	std	Y+23, r19	; 0x17
-    1778:	2e 8b       	std	Y+22, r18	; 0x16
-    177a:	8e 89       	ldd	r24, Y+22	; 0x16
-    177c:	9f 89       	ldd	r25, Y+23	; 0x17
-    177e:	81 30       	cpi	r24, 0x01	; 1
-    1780:	91 05       	cpc	r25, r1
-    1782:	49 f1       	breq	.+82     	; 0x17d6 <BCM_voidAddToQueue+0xf8>
-    1784:	2e 89       	ldd	r18, Y+22	; 0x16
-    1786:	3f 89       	ldd	r19, Y+23	; 0x17
-    1788:	22 30       	cpi	r18, 0x02	; 2
-    178a:	31 05       	cpc	r19, r1
-    178c:	09 f4       	brne	.+2      	; 0x1790 <BCM_voidAddToQueue+0xb2>
-    178e:	41 c0       	rjmp	.+130    	; 0x1812 <BCM_voidAddToQueue+0x134>
-    1790:	8e 89       	ldd	r24, Y+22	; 0x16
-    1792:	9f 89       	ldd	r25, Y+23	; 0x17
-    1794:	00 97       	sbiw	r24, 0x00	; 0
-    1796:	09 f0       	breq	.+2      	; 0x179a <BCM_voidAddToQueue+0xbc>
-    1798:	59 c0       	rjmp	.+178    	; 0x184c <BCM_voidAddToQueue+0x16e>
+    17ce:	8b 85       	ldd	r24, Y+11	; 0x0b
+    17d0:	28 2f       	mov	r18, r24
+    17d2:	30 e0       	ldi	r19, 0x00	; 0
+    17d4:	3f 8b       	std	Y+23, r19	; 0x17
+    17d6:	2e 8b       	std	Y+22, r18	; 0x16
+    17d8:	8e 89       	ldd	r24, Y+22	; 0x16
+    17da:	9f 89       	ldd	r25, Y+23	; 0x17
+    17dc:	81 30       	cpi	r24, 0x01	; 1
+    17de:	91 05       	cpc	r25, r1
+    17e0:	49 f1       	breq	.+82     	; 0x1834 <BCM_voidAddToQueue+0xf8>
+    17e2:	2e 89       	ldd	r18, Y+22	; 0x16
+    17e4:	3f 89       	ldd	r19, Y+23	; 0x17
+    17e6:	22 30       	cpi	r18, 0x02	; 2
+    17e8:	31 05       	cpc	r19, r1
+    17ea:	09 f4       	brne	.+2      	; 0x17ee <BCM_voidAddToQueue+0xb2>
+    17ec:	41 c0       	rjmp	.+130    	; 0x1870 <BCM_voidAddToQueue+0x134>
+    17ee:	8e 89       	ldd	r24, Y+22	; 0x16
+    17f0:	9f 89       	ldd	r25, Y+23	; 0x17
+    17f2:	00 97       	sbiw	r24, 0x00	; 0
+    17f4:	09 f0       	breq	.+2      	; 0x17f8 <BCM_voidAddToQueue+0xbc>
+    17f6:	59 c0       	rjmp	.+178    	; 0x18aa <BCM_voidAddToQueue+0x16e>
 		case USART:
 			USARTQueueIndex = USARTQueueIndex > (MAX_USART_QUEUE_SIZE - 1) ? 0 : USARTQueueIndex;
-    179a:	80 91 cb 01 	lds	r24, 0x01CB
-    179e:	84 31       	cpi	r24, 0x14	; 20
-    17a0:	20 f4       	brcc	.+8      	; 0x17aa <BCM_voidAddToQueue+0xcc>
-    17a2:	90 91 cb 01 	lds	r25, 0x01CB
-    17a6:	9d 8b       	std	Y+21, r25	; 0x15
-    17a8:	01 c0       	rjmp	.+2      	; 0x17ac <BCM_voidAddToQueue+0xce>
-    17aa:	1d 8a       	std	Y+21, r1	; 0x15
-    17ac:	2d 89       	ldd	r18, Y+21	; 0x15
-    17ae:	20 93 cb 01 	sts	0x01CB, r18
+    17f8:	80 91 cb 01 	lds	r24, 0x01CB
+    17fc:	84 31       	cpi	r24, 0x14	; 20
+    17fe:	20 f4       	brcc	.+8      	; 0x1808 <BCM_voidAddToQueue+0xcc>
+    1800:	90 91 cb 01 	lds	r25, 0x01CB
+    1804:	9d 8b       	std	Y+21, r25	; 0x15
+    1806:	01 c0       	rjmp	.+2      	; 0x180a <BCM_voidAddToQueue+0xce>
+    1808:	1d 8a       	std	Y+21, r1	; 0x15
+    180a:	2d 89       	ldd	r18, Y+21	; 0x15
+    180c:	20 93 cb 01 	sts	0x01CB, r18
 			BCM_voidAddProtocol(bcm, &USARTQueueIndex, bcm_USART_queue);
-    17b2:	eb ec       	ldi	r30, 0xCB	; 203
-    17b4:	f1 e0       	ldi	r31, 0x01	; 1
-    17b6:	a4 e9       	ldi	r26, 0x94	; 148
-    17b8:	b3 e0       	ldi	r27, 0x03	; 3
-    17ba:	09 81       	ldd	r16, Y+1	; 0x01
-    17bc:	1a 81       	ldd	r17, Y+2	; 0x02
-    17be:	2b 81       	ldd	r18, Y+3	; 0x03
-    17c0:	3c 81       	ldd	r19, Y+4	; 0x04
-    17c2:	4d 81       	ldd	r20, Y+5	; 0x05
-    17c4:	5e 81       	ldd	r21, Y+6	; 0x06
-    17c6:	6f 81       	ldd	r22, Y+7	; 0x07
-    17c8:	78 85       	ldd	r23, Y+8	; 0x08
-    17ca:	89 85       	ldd	r24, Y+9	; 0x09
-    17cc:	7f 01       	movw	r14, r30
-    17ce:	6d 01       	movw	r12, r26
-    17d0:	0e 94 df 09 	call	0x13be	; 0x13be <BCM_voidAddProtocol>
-    17d4:	3b c0       	rjmp	.+118    	; 0x184c <BCM_voidAddToQueue+0x16e>
+    1810:	eb ec       	ldi	r30, 0xCB	; 203
+    1812:	f1 e0       	ldi	r31, 0x01	; 1
+    1814:	a4 e9       	ldi	r26, 0x94	; 148
+    1816:	b3 e0       	ldi	r27, 0x03	; 3
+    1818:	09 81       	ldd	r16, Y+1	; 0x01
+    181a:	1a 81       	ldd	r17, Y+2	; 0x02
+    181c:	2b 81       	ldd	r18, Y+3	; 0x03
+    181e:	3c 81       	ldd	r19, Y+4	; 0x04
+    1820:	4d 81       	ldd	r20, Y+5	; 0x05
+    1822:	5e 81       	ldd	r21, Y+6	; 0x06
+    1824:	6f 81       	ldd	r22, Y+7	; 0x07
+    1826:	78 85       	ldd	r23, Y+8	; 0x08
+    1828:	89 85       	ldd	r24, Y+9	; 0x09
+    182a:	7f 01       	movw	r14, r30
+    182c:	6d 01       	movw	r12, r26
+    182e:	0e 94 f0 0a 	call	0x15e0	; 0x15e0 <BCM_voidAddProtocol>
+    1832:	3b c0       	rjmp	.+118    	; 0x18aa <BCM_voidAddToQueue+0x16e>
 			break;
 		case SPI:
 			SPIQueueIndex = SPIQueueIndex > (MAX_SPI_QUEUE_SIZE - 1) ? 0 : SPIQueueIndex;
-    17d6:	80 91 cc 01 	lds	r24, 0x01CC
-    17da:	84 31       	cpi	r24, 0x14	; 20
-    17dc:	20 f4       	brcc	.+8      	; 0x17e6 <BCM_voidAddToQueue+0x108>
-    17de:	30 91 cc 01 	lds	r19, 0x01CC
-    17e2:	3c 8b       	std	Y+20, r19	; 0x14
-    17e4:	01 c0       	rjmp	.+2      	; 0x17e8 <BCM_voidAddToQueue+0x10a>
-    17e6:	1c 8a       	std	Y+20, r1	; 0x14
-    17e8:	8c 89       	ldd	r24, Y+20	; 0x14
-    17ea:	80 93 cc 01 	sts	0x01CC, r24
+    1834:	80 91 cc 01 	lds	r24, 0x01CC
+    1838:	84 31       	cpi	r24, 0x14	; 20
+    183a:	20 f4       	brcc	.+8      	; 0x1844 <BCM_voidAddToQueue+0x108>
+    183c:	30 91 cc 01 	lds	r19, 0x01CC
+    1840:	3c 8b       	std	Y+20, r19	; 0x14
+    1842:	01 c0       	rjmp	.+2      	; 0x1846 <BCM_voidAddToQueue+0x10a>
+    1844:	1c 8a       	std	Y+20, r1	; 0x14
+    1846:	8c 89       	ldd	r24, Y+20	; 0x14
+    1848:	80 93 cc 01 	sts	0x01CC, r24
 			BCM_voidAddProtocol(bcm, &SPIQueueIndex, bcm_SPI_queue);
-    17ee:	ec ec       	ldi	r30, 0xCC	; 204
-    17f0:	f1 e0       	ldi	r31, 0x01	; 1
-    17f2:	a8 e4       	ldi	r26, 0x48	; 72
-    17f4:	b4 e0       	ldi	r27, 0x04	; 4
-    17f6:	09 81       	ldd	r16, Y+1	; 0x01
-    17f8:	1a 81       	ldd	r17, Y+2	; 0x02
-    17fa:	2b 81       	ldd	r18, Y+3	; 0x03
-    17fc:	3c 81       	ldd	r19, Y+4	; 0x04
-    17fe:	4d 81       	ldd	r20, Y+5	; 0x05
-    1800:	5e 81       	ldd	r21, Y+6	; 0x06
-    1802:	6f 81       	ldd	r22, Y+7	; 0x07
-    1804:	78 85       	ldd	r23, Y+8	; 0x08
-    1806:	89 85       	ldd	r24, Y+9	; 0x09
-    1808:	7f 01       	movw	r14, r30
-    180a:	6d 01       	movw	r12, r26
-    180c:	0e 94 df 09 	call	0x13be	; 0x13be <BCM_voidAddProtocol>
-    1810:	1d c0       	rjmp	.+58     	; 0x184c <BCM_voidAddToQueue+0x16e>
+    184c:	ec ec       	ldi	r30, 0xCC	; 204
+    184e:	f1 e0       	ldi	r31, 0x01	; 1
+    1850:	a8 e4       	ldi	r26, 0x48	; 72
+    1852:	b4 e0       	ldi	r27, 0x04	; 4
+    1854:	09 81       	ldd	r16, Y+1	; 0x01
+    1856:	1a 81       	ldd	r17, Y+2	; 0x02
+    1858:	2b 81       	ldd	r18, Y+3	; 0x03
+    185a:	3c 81       	ldd	r19, Y+4	; 0x04
+    185c:	4d 81       	ldd	r20, Y+5	; 0x05
+    185e:	5e 81       	ldd	r21, Y+6	; 0x06
+    1860:	6f 81       	ldd	r22, Y+7	; 0x07
+    1862:	78 85       	ldd	r23, Y+8	; 0x08
+    1864:	89 85       	ldd	r24, Y+9	; 0x09
+    1866:	7f 01       	movw	r14, r30
+    1868:	6d 01       	movw	r12, r26
+    186a:	0e 94 f0 0a 	call	0x15e0	; 0x15e0 <BCM_voidAddProtocol>
+    186e:	1d c0       	rjmp	.+58     	; 0x18aa <BCM_voidAddToQueue+0x16e>
 			break;
 		case I2C:
 			I2CQueueIndex = I2CQueueIndex > (MAX_I2C_QUEUE_SIZE - 1) ? 0 : I2CQueueIndex;
-    1812:	80 91 cd 01 	lds	r24, 0x01CD
-    1816:	84 31       	cpi	r24, 0x14	; 20
-    1818:	20 f4       	brcc	.+8      	; 0x1822 <BCM_voidAddToQueue+0x144>
-    181a:	90 91 cd 01 	lds	r25, 0x01CD
-    181e:	9b 8b       	std	Y+19, r25	; 0x13
-    1820:	01 c0       	rjmp	.+2      	; 0x1824 <BCM_voidAddToQueue+0x146>
-    1822:	1b 8a       	std	Y+19, r1	; 0x13
-    1824:	2b 89       	ldd	r18, Y+19	; 0x13
-    1826:	20 93 cd 01 	sts	0x01CD, r18
+    1870:	80 91 cd 01 	lds	r24, 0x01CD
+    1874:	84 31       	cpi	r24, 0x14	; 20
+    1876:	20 f4       	brcc	.+8      	; 0x1880 <BCM_voidAddToQueue+0x144>
+    1878:	90 91 cd 01 	lds	r25, 0x01CD
+    187c:	9b 8b       	std	Y+19, r25	; 0x13
+    187e:	01 c0       	rjmp	.+2      	; 0x1882 <BCM_voidAddToQueue+0x146>
+    1880:	1b 8a       	std	Y+19, r1	; 0x13
+    1882:	2b 89       	ldd	r18, Y+19	; 0x13
+    1884:	20 93 cd 01 	sts	0x01CD, r18
 			BCM_voidAddProtocol(bcm, &I2CQueueIndex, bcm_I2C_queue);
-    182a:	ed ec       	ldi	r30, 0xCD	; 205
-    182c:	f1 e0       	ldi	r31, 0x01	; 1
-    182e:	ac ef       	ldi	r26, 0xFC	; 252
-    1830:	b4 e0       	ldi	r27, 0x04	; 4
-    1832:	09 81       	ldd	r16, Y+1	; 0x01
-    1834:	1a 81       	ldd	r17, Y+2	; 0x02
-    1836:	2b 81       	ldd	r18, Y+3	; 0x03
-    1838:	3c 81       	ldd	r19, Y+4	; 0x04
-    183a:	4d 81       	ldd	r20, Y+5	; 0x05
-    183c:	5e 81       	ldd	r21, Y+6	; 0x06
-    183e:	6f 81       	ldd	r22, Y+7	; 0x07
-    1840:	78 85       	ldd	r23, Y+8	; 0x08
-    1842:	89 85       	ldd	r24, Y+9	; 0x09
-    1844:	7f 01       	movw	r14, r30
-    1846:	6d 01       	movw	r12, r26
-    1848:	0e 94 df 09 	call	0x13be	; 0x13be <BCM_voidAddProtocol>
+    1888:	ed ec       	ldi	r30, 0xCD	; 205
+    188a:	f1 e0       	ldi	r31, 0x01	; 1
+    188c:	ac ef       	ldi	r26, 0xFC	; 252
+    188e:	b4 e0       	ldi	r27, 0x04	; 4
+    1890:	09 81       	ldd	r16, Y+1	; 0x01
+    1892:	1a 81       	ldd	r17, Y+2	; 0x02
+    1894:	2b 81       	ldd	r18, Y+3	; 0x03
+    1896:	3c 81       	ldd	r19, Y+4	; 0x04
+    1898:	4d 81       	ldd	r20, Y+5	; 0x05
+    189a:	5e 81       	ldd	r21, Y+6	; 0x06
+    189c:	6f 81       	ldd	r22, Y+7	; 0x07
+    189e:	78 85       	ldd	r23, Y+8	; 0x08
+    18a0:	89 85       	ldd	r24, Y+9	; 0x09
+    18a2:	7f 01       	movw	r14, r30
+    18a4:	6d 01       	movw	r12, r26
+    18a6:	0e 94 f0 0a 	call	0x15e0	; 0x15e0 <BCM_voidAddProtocol>
 			break;
 		}
 	}
 	BCM_voidSendQueuedData();
-    184c:	0e 94 37 0c 	call	0x186e	; 0x186e <BCM_voidSendQueuedData>
+    18aa:	0e 94 f9 07 	call	0xff2	; 0xff2 <BCM_voidSendQueuedData>
 }
-    1850:	68 96       	adiw	r28, 0x18	; 24
-    1852:	0f b6       	in	r0, 0x3f	; 63
-    1854:	f8 94       	cli
-    1856:	de bf       	out	0x3e, r29	; 62
-    1858:	0f be       	out	0x3f, r0	; 63
-    185a:	cd bf       	out	0x3d, r28	; 61
-    185c:	cf 91       	pop	r28
-    185e:	df 91       	pop	r29
-    1860:	1f 91       	pop	r17
-    1862:	0f 91       	pop	r16
-    1864:	ff 90       	pop	r15
-    1866:	ef 90       	pop	r14
-    1868:	df 90       	pop	r13
-    186a:	cf 90       	pop	r12
-    186c:	08 95       	ret
-
-0000186e <BCM_voidSendQueuedData>:
-
-void BCM_voidSendQueuedData(){
-    186e:	df 93       	push	r29
-    1870:	cf 93       	push	r28
-    1872:	cd b7       	in	r28, 0x3d	; 61
-    1874:	de b7       	in	r29, 0x3e	; 62
-	BCM_voidCheckAndStart(&generalQueueState, currentGeneralIndex, bcm_General_queue);
-    1876:	40 91 ce 01 	lds	r20, 0x01CE
-    187a:	88 e6       	ldi	r24, 0x68	; 104
-    187c:	91 e0       	ldi	r25, 0x01	; 1
-    187e:	22 ed       	ldi	r18, 0xD2	; 210
-    1880:	31 e0       	ldi	r19, 0x01	; 1
-    1882:	64 2f       	mov	r22, r20
-    1884:	a9 01       	movw	r20, r18
-    1886:	0e 94 70 0a 	call	0x14e0	; 0x14e0 <BCM_voidCheckAndStart>
-	BCM_voidCheckAndStart(&USARTQueueState, currentUSARTIndex, bcm_USART_queue);
-    188a:	40 91 cf 01 	lds	r20, 0x01CF
-    188e:	89 e6       	ldi	r24, 0x69	; 105
-    1890:	91 e0       	ldi	r25, 0x01	; 1
-    1892:	24 e9       	ldi	r18, 0x94	; 148
-    1894:	33 e0       	ldi	r19, 0x03	; 3
-    1896:	64 2f       	mov	r22, r20
-    1898:	a9 01       	movw	r20, r18
-    189a:	0e 94 70 0a 	call	0x14e0	; 0x14e0 <BCM_voidCheckAndStart>
-	BCM_voidCheckAndStart(&SPIQueueState, currentSPIIndex, bcm_SPI_queue);
-    189e:	40 91 d0 01 	lds	r20, 0x01D0
-    18a2:	8a e6       	ldi	r24, 0x6A	; 106
-    18a4:	91 e0       	ldi	r25, 0x01	; 1
-    18a6:	28 e4       	ldi	r18, 0x48	; 72
-    18a8:	34 e0       	ldi	r19, 0x04	; 4
-    18aa:	64 2f       	mov	r22, r20
-    18ac:	a9 01       	movw	r20, r18
-    18ae:	0e 94 70 0a 	call	0x14e0	; 0x14e0 <BCM_voidCheckAndStart>
-	BCM_voidCheckAndStart(&I2CQueueState, currentI2CIndex, bcm_I2C_queue);
-    18b2:	40 91 d1 01 	lds	r20, 0x01D1
-    18b6:	8b e6       	ldi	r24, 0x6B	; 107
-    18b8:	91 e0       	ldi	r25, 0x01	; 1
-    18ba:	2c ef       	ldi	r18, 0xFC	; 252
-    18bc:	34 e0       	ldi	r19, 0x04	; 4
-    18be:	64 2f       	mov	r22, r20
-    18c0:	a9 01       	movw	r20, r18
-    18c2:	0e 94 70 0a 	call	0x14e0	; 0x14e0 <BCM_voidCheckAndStart>
-}
-    18c6:	cf 91       	pop	r28
-    18c8:	df 91       	pop	r29
+    18ae:	68 96       	adiw	r28, 0x18	; 24
+    18b0:	0f b6       	in	r0, 0x3f	; 63
+    18b2:	f8 94       	cli
+    18b4:	de bf       	out	0x3e, r29	; 62
+    18b6:	0f be       	out	0x3f, r0	; 63
+    18b8:	cd bf       	out	0x3d, r28	; 61
+    18ba:	cf 91       	pop	r28
+    18bc:	df 91       	pop	r29
+    18be:	1f 91       	pop	r17
+    18c0:	0f 91       	pop	r16
+    18c2:	ff 90       	pop	r15
+    18c4:	ef 90       	pop	r14
+    18c6:	df 90       	pop	r13
+    18c8:	cf 90       	pop	r12
     18ca:	08 95       	ret
 
 000018cc <USART_voidInit>:
@@ -16236,7 +16234,7 @@ int main(){
 	TMR0_voidInit();
     6972:	0e 94 b3 10 	call	0x2166	; 0x2166 <TMR0_voidInit>
 	BCM_voidInit();
-    6976:	0e 94 52 0b 	call	0x16a4	; 0x16a4 <BCM_voidInit>
+    6976:	0e 94 81 0b 	call	0x1702	; 0x1702 <BCM_voidInit>
 	while(1){
 		global_index = 0;
     697a:	10 92 cc 05 	sts	0x05CC, r1
@@ -16262,7 +16260,7 @@ int main(){
     69a2:	10 e0       	ldi	r17, 0x00	; 0
     69a4:	ee 24       	eor	r14, r14
     69a6:	e3 94       	inc	r14
-    69a8:	0e 94 6f 0b 	call	0x16de	; 0x16de <BCM_voidAddToQueue>
+    69a8:	0e 94 9e 0b 	call	0x173c	; 0x173c <BCM_voidAddToQueue>
 			BCM_voidAddToQueue(name[global_index],SPI, SPI_Complete, NULL, NULL, SPECIFIC);
     69ac:	80 91 cc 05 	lds	r24, 0x05CC
     69b0:	88 2f       	mov	r24, r24
@@ -16281,7 +16279,7 @@ int main(){
     69ca:	10 e0       	ldi	r17, 0x00	; 0
     69cc:	ee 24       	eor	r14, r14
     69ce:	e3 94       	inc	r14
-    69d0:	0e 94 6f 0b 	call	0x16de	; 0x16de <BCM_voidAddToQueue>
+    69d0:	0e 94 9e 0b 	call	0x173c	; 0x173c <BCM_voidAddToQueue>
 			BCM_voidAddToQueue(name[global_index],I2C, I2C_Complete, slave_ptr, reg_ptr, SPECIFIC);
     69d4:	80 91 cc 05 	lds	r24, 0x05CC
     69d8:	88 2f       	mov	r24, r24
@@ -16302,7 +16300,7 @@ int main(){
     69fe:	8d 01       	movw	r16, r26
     6a00:	ee 24       	eor	r14, r14
     6a02:	e3 94       	inc	r14
-    6a04:	0e 94 6f 0b 	call	0x16de	; 0x16de <BCM_voidAddToQueue>
+    6a04:	0e 94 9e 0b 	call	0x173c	; 0x173c <BCM_voidAddToQueue>
 			REG_ADDRESS++;
     6a08:	80 91 cd 05 	lds	r24, 0x05CD
     6a0c:	8f 5f       	subi	r24, 0xFF	; 255

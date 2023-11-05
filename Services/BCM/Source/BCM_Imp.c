@@ -40,6 +40,45 @@ static volatile u8 currentSPIIndex = 0;
 static volatile u8 currentI2CIndex = 0;
 static volatile u8 interruptI2Cindex = 1;
 
+static void BCM_voidCheckAndStart(volatile u8* state, u8 index, volatile BCM bcm_queue[]){
+	if(*state == READY){
+		if(bcm_queue[index].state == READY){
+			switch(bcm_queue[index].protocol){
+			case USART:
+				if(USARTQueueState != BUSY){
+					USARTQueueState = BUSY;
+					bcm_queue[index].state = BUSY;
+					*state = BUSY;
+					USART_voidSendInterruptByte(bcm_queue[index].data);
+				}
+				break;
+			case SPI:
+				if(SPIQueueState != BUSY){
+					SPIQueueState = BUSY;
+					bcm_queue[index].state = BUSY;
+					*state = BUSY;
+					SPI_voidSendDataISR(bcm_queue[index].data);
+				}
+				break;
+			case I2C:
+				if(I2CQueueState != BUSY){
+					I2CQueueState = BUSY;
+					bcm_queue[index].state = BUSY;
+					*state = BUSY;
+					I2C_Master_INT_voidSendStartCond();
+				}
+				break;
+			}
+		}
+	}
+}
+
+static void BCM_voidSendQueuedData(){
+	BCM_voidCheckAndStart(&generalQueueState, currentGeneralIndex, bcm_General_queue);
+	BCM_voidCheckAndStart(&USARTQueueState, currentUSARTIndex, bcm_USART_queue);
+	BCM_voidCheckAndStart(&SPIQueueState, currentSPIIndex, bcm_SPI_queue);
+	BCM_voidCheckAndStart(&I2CQueueState, currentI2CIndex, bcm_I2C_queue);
+}
 
 static void BCM_voidResetState(volatile u8* index, volatile u8* state, volatile BCM bcm_queue[]){
 	bcm_queue[*index].state = DONE;
@@ -162,41 +201,6 @@ static void BCM_voidAddProtocol(BCM bcm, volatile u8* index, volatile BCM bcm_qu
 	BCM_voidSendQueuedData();
 }
 
-
-
-static void BCM_voidCheckAndStart(volatile u8* state, u8 index, volatile BCM bcm_queue[]){
-	if(*state == READY){
-		if(bcm_queue[index].state == READY){
-			switch(bcm_queue[index].protocol){
-			case USART:
-				if(USARTQueueState != BUSY){
-					USARTQueueState = BUSY;
-					bcm_queue[index].state = BUSY;
-					*state = BUSY;
-					USART_voidSendInterruptByte(bcm_queue[index].data);
-				}
-				break;
-			case SPI:
-				if(SPIQueueState != BUSY){
-					SPIQueueState = BUSY;
-					bcm_queue[index].state = BUSY;
-					*state = BUSY;
-					SPI_voidSendDataISR(bcm_queue[index].data);
-				}
-				break;
-			case I2C:
-				if(I2CQueueState != BUSY){
-					I2CQueueState = BUSY;
-					bcm_queue[index].state = BUSY;
-					*state = BUSY;
-					I2C_Master_INT_voidSendStartCond();
-				}
-				break;
-			}
-		}
-	}
-}
-
 void BCM_voidInit(){
 	GIE_voidEnable();
 #if USART_PROTOCOL == BCM_ENABLE
@@ -239,12 +243,5 @@ void BCM_voidAddToQueue(u8 data,BCM_COMM_Protocol protocol ,void(*Fun_PTR)(void)
 		}
 	}
 	BCM_voidSendQueuedData();
-}
-
-void BCM_voidSendQueuedData(){
-	BCM_voidCheckAndStart(&generalQueueState, currentGeneralIndex, bcm_General_queue);
-	BCM_voidCheckAndStart(&USARTQueueState, currentUSARTIndex, bcm_USART_queue);
-	BCM_voidCheckAndStart(&SPIQueueState, currentSPIIndex, bcm_SPI_queue);
-	BCM_voidCheckAndStart(&I2CQueueState, currentI2CIndex, bcm_I2C_queue);
 }
 

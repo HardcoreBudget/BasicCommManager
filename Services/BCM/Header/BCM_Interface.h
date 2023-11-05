@@ -28,6 +28,5 @@ typedef enum{
 
 void BCM_voidInit();
 void BCM_voidAddToQueue(u8 data,BCM_COMM_Protocol protocol ,void(*Fun_PTR)(void), u8* SlaveAddress, u8* RegisterAddress, QUEUE_TYPE queueType);
-void BCM_voidSendQueuedData();
 
 #endif /* SERVICES_BCM_HEADER_BCM_INTERFACE_H_ */
